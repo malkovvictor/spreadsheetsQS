@@ -1,6 +1,5 @@
 package ru.victormalkov;
 
-import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -13,13 +12,14 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
-import com.google.api.services.sheets.v4.model.Spreadsheet;
-import com.google.api.services.sheets.v4.model.ValueRange;
+import com.google.api.services.sheets.v4.model.*;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class QuickStart {
     private static String APP_NAME = "Quickstart for Google Spreadsheets API";
@@ -28,6 +28,14 @@ public class QuickStart {
 
     private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
+
+    private static final String regexprCache = "(\\d+)(?![ТTЮтю0-9])";
+    private static final String regexprOnline = "(\\d+)(?=[Юю])";
+    private static final String regexprTerminal = "(\\d+)(?=[ТTт])";
+    private static final Pattern pcache = Pattern.compile(regexprCache);
+    private static final Pattern ponline = Pattern.compile(regexprOnline);
+    private static final Pattern pterminal = Pattern.compile(regexprTerminal);
+
 
     private static Credential getCredentials(final NetHttpTransport transport) throws IOException {
         InputStream in = QuickStart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
@@ -40,39 +48,152 @@ public class QuickStart {
                 .setDataStoreFactory(new FileDataStoreFactory(new File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8899).build();
+        LocalServerReceiver receiver = new LocalServerReceiver.Builder().build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
     public static void main(String[] args) throws GeneralSecurityException, IOException {
         final NetHttpTransport transport = GoogleNetHttpTransport.newTrustedTransport();
         final String spreadsheetId = "1OPVrXiPLh3LtM8rIveEPhUJQjgEtyM08T7i5bvYE3Gw";
-        final String range = "01,09,2021!A2:B50";
         Sheets service = new Sheets.Builder(transport, JSON_FACTORY, getCredentials(transport))
                 .setApplicationName(APP_NAME)
                 .build();
 
-        Spreadsheet responce = service.spreadsheets().get(spreadsheetId)
-                .setRanges(Collections.singletonList(range))
+        Spreadsheet spreadsheet = service.spreadsheets().get(spreadsheetId)
                 .setIncludeGridData(true)
                 .execute();
 
-        System.out.println(responce.toPrettyString());
+        List<Sheet> sheets = spreadsheet.getSheets();
+        for (Sheet sheet : sheets) {
+            System.out.println("Sheet: " + sheet.getProperties().getTitle());
+            GridData data = sheet.getData().get(0);
+            if (data == null) {
+                System.out.println("No data found");
+            } else {
+                List<RowData> rdata = data.getRowData();
+                if (rdata == null || rdata.size() < 2) {
+                    System.out.println("Too few rows");
+                } else {
+                    Integer border1 = null;
+                    Integer border2 = null;
+                    for (int i = 2; i < rdata.size(); i++) {
+                        RowData row = rdata.get(i);
+                        List<CellData> rowdata = row.getValues();
+                        if (rowdata == null || rowdata.size() < 2) {
+                            // nothing
+                        } else {
+                            CellData cdata = rowdata.get(1);
+                            if ((cdata.getFormattedValue() == null
+                                    || cdata.getFormattedValue().isBlank()
+                                    || isGreen(cdata)
+                                    || isBlue(cdata))
+                                   && border1 == null) {
+                                border1 = i;
+                            } else if (isRed(cdata) && border2 == null) {
+                                border2 = i;
+                                break;
+                            }
+                        }
+                    }
+                    System.out.println("Borders: " + border1 + ", " + border2);
+                  /*  int dayOnline = 0;
+                    int dayCache = 0;
+                    int dayTerminal = 0;
+                    int nightOnline = 0;
+                    int nightCache = 0;
+                    int nightTerminal = 0;*/
+                    DailyReport report = new DailyReport();
 
 
-/*        ValueRange responce = service.spreadsheets().get(spreadsheetId)
-                .setRanges(Collections.singletonList(range))
-                .setIncludeGridData(true)
-                .execute();*/
+                    if (border1 == null || border2 == null) {
+                        System.out.println("not all borders found -- cannot parse this sheet");
+                    } else {
+                        //first group
+                        doCount(rdata, 2, border1, report);
+                        doCount(rdata, border1 + 1, border2, report);
+                        doCount(rdata, border2 + 2, rdata.size(), report);
 
- /*       List<List<Object>> values = responce.getValues();
-        if (values == null || values.isEmpty()) {
-            System.out.println("No data");
-        } else {
-            System.out.println("Something found");
-            for (List row : values) {
-                System.out.printf("%s, %s\n", row.get(0), row.get(1));
+                        System.out.println(report);
+                    }
+                }
             }
-        } */
+        }
+    }
+
+    private static void doCount(List<RowData> rdata, int from, int to, DailyReport report) {
+        for (int i = from; i < to; i++) {
+            // с третьей колонки и до конца
+            List<CellData> rowdata = rdata.get(i).getValues();
+            if (rowdata != null) {
+                for (CellData cdata : rowdata) {
+                    if (isBlue(cdata) || isGreen(cdata)) {
+                        String s = cdata.getFormattedValue();
+                        Matcher m = pcache.matcher(s);
+                        while (m.find()) {
+                            if (isGreen(cdata)) {
+                                report.addDayCache(Integer.parseInt(m.group()));
+                            } else {
+                                report.addNightCache(Integer.parseInt(m.group()));
+                            }
+                        }
+
+                        m = ponline.matcher(s);
+                        while (m.find()) {
+                            if (isGreen(cdata)) {
+                                report.addDayOnline(Integer.parseInt(m.group()));
+                            } else {
+                                report.addNightOnline(Integer.parseInt(m.group()));
+                            }
+                        }
+
+                        m = pterminal.matcher(s);
+                        while (m.find()) {
+                            if (isGreen(cdata)) {
+                                report.addDayTerminal(Integer.parseInt(m.group()));
+                            } else {
+                                report.addNightTerminal(Integer.parseInt(m.group()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    public static final double eps = 0.02;
+    public static boolean isGreen(Color color) {
+        return n0(color.getGreen()) > n0(color.getBlue()) + eps &&
+                n0(color.getGreen()) > n0(color.getRed()) + eps;
+    }
+
+    public static boolean isGreen(CellData data) {
+        if (data == null || data.getEffectiveFormat() == null) return false;
+        return isGreen(data.getEffectiveFormat().getBackgroundColor());
+    }
+
+    /* RGB(0, 1, 1) is blue */
+    public static boolean isBlue(Color color) {
+        return n0(color.getBlue()) >= n0(color.getGreen()) &&
+                n0(color.getBlue()) > n0(color.getRed()) + eps;
+    }
+    public static boolean isBlue(CellData data) {
+        if (data == null || data.getEffectiveFormat() == null) return false;
+        return isBlue(data.getEffectiveFormat().getBackgroundColor());
+    }
+
+
+    public static boolean isRed(Color color) {
+        return n0(color.getRed()) > n0(color.getGreen()) + eps &&
+                n0(color.getRed()) > n0(color.getBlue()) + eps;
+    }
+    public static boolean isRed(CellData data) {
+        if (data == null || data.getEffectiveFormat() == null) return false;
+        return isRed(data.getEffectiveFormat().getBackgroundColor());
+    }
+
+
+    public static final Float n0(Float f) {
+        return f == null ? 0 : f;
     }
 }
