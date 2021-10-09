@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class QuickStart {
-    private static String APP_NAME = "Quickstart for Google Spreadsheets API";
+public class ReportChecker {
+    private static String APP_NAME = "TRON Report Checker";
     private static JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
 
@@ -38,7 +38,7 @@ public class QuickStart {
 
 
     private static Credential getCredentials(final NetHttpTransport transport) throws IOException {
-        InputStream in = QuickStart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+        InputStream in = ReportChecker.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
         if (null == in) {
             throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
         }
@@ -96,22 +96,16 @@ public class QuickStart {
                         }
                     }
                     System.out.println("Borders: " + border1 + ", " + border2);
-                  /*  int dayOnline = 0;
-                    int dayCache = 0;
-                    int dayTerminal = 0;
-                    int nightOnline = 0;
-                    int nightCache = 0;
-                    int nightTerminal = 0;*/
-                    DailyReport report = new DailyReport();
 
+                    DailyReport report = new DailyReport();
 
                     if (border1 == null || border2 == null) {
                         System.out.println("not all borders found -- cannot parse this sheet");
                     } else {
                         //first group
                         doCount(rdata, 2, border1, report);
-                        doCount(rdata, border1 + 1, border2, report);
-                        doCount(rdata, border2 + 2, rdata.size(), report);
+                        doCount(rdata, border1, border2, report);
+                        doCount(rdata, border2 + 1, rdata.size(), report);
 
                         System.out.println(report);
                     }
@@ -130,7 +124,7 @@ public class QuickStart {
                         String s = cdata.getFormattedValue();
                         Matcher m = pcache.matcher(s);
                         while (m.find()) {
-                            if (isGreen(cdata)) {
+                            if (isBlue(cdata)) {
                                 report.addDayCache(Integer.parseInt(m.group()));
                             } else {
                                 report.addNightCache(Integer.parseInt(m.group()));
@@ -139,7 +133,7 @@ public class QuickStart {
 
                         m = ponline.matcher(s);
                         while (m.find()) {
-                            if (isGreen(cdata)) {
+                            if (isBlue(cdata)) {
                                 report.addDayOnline(Integer.parseInt(m.group()));
                             } else {
                                 report.addNightOnline(Integer.parseInt(m.group()));
@@ -148,7 +142,7 @@ public class QuickStart {
 
                         m = pterminal.matcher(s);
                         while (m.find()) {
-                            if (isGreen(cdata)) {
+                            if (isBlue(cdata)) {
                                 report.addDayTerminal(Integer.parseInt(m.group()));
                             } else {
                                 report.addNightTerminal(Integer.parseInt(m.group()));
