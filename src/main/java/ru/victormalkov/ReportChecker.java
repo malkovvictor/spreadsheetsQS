@@ -55,6 +55,7 @@ public class ReportChecker {
     public static void main(String[] args) throws GeneralSecurityException, IOException {
         final NetHttpTransport transport = GoogleNetHttpTransport.newTrustedTransport();
         final String spreadsheetId = "1OPVrXiPLh3LtM8rIveEPhUJQjgEtyM08T7i5bvYE3Gw";
+        //final String spreadsheetId = "1-VoVp6VvzeAQZgmMv4Bx0yGq9Q0GrBk-sK6AUtgE7NM";
         Sheets service = new Sheets.Builder(transport, JSON_FACTORY, getCredentials(transport))
                 .setApplicationName(APP_NAME)
                 .build();
@@ -81,15 +82,18 @@ public class ReportChecker {
                         List<CellData> rowdata = row.getValues();
                         if (rowdata == null || rowdata.size() < 2) {
                             // nothing
-                        } else {
+                        } else if (border1 == null) {
                             CellData cdata = rowdata.get(1);
                             if ((cdata.getFormattedValue() == null
                                     || cdata.getFormattedValue().isBlank()
                                     || isGreen(cdata)
                                     || isBlue(cdata))
-                                   && border1 == null) {
+                                    && border1 == null) {
                                 border1 = i;
-                            } else if (isRed(cdata) && border2 == null) {
+                            }
+                        } else {
+                            CellData cdata = rowdata.get(0);
+                            if (isRed(cdata)) {
                                 border2 = i;
                                 break;
                             }
@@ -102,7 +106,6 @@ public class ReportChecker {
                     if (border1 == null || border2 == null) {
                         System.out.println("not all borders found -- cannot parse this sheet");
                     } else {
-                        //first group
                         doCount(rdata, 2, border1, report);
                         doCount(rdata, border1, border2, report);
                         doCount(rdata, border2 + 1, rdata.size(), report);
