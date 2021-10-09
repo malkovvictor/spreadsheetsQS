@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.10'
 }
 
 group 'ru.victormalkov'
@@ -10,6 +11,11 @@ mainClassName = 'ru.victormalkov.ReportChecker'
 
 repositories {
     mavenCentral()
+}
+
+javafx {
+    version = "17"
+    modules = [ 'javafx.controls' ]
 }
 
 dependencies {
