@@ -116,7 +116,6 @@ public class ReportChecker {
 
     private static void doCount(List<RowData> rdata, int from, int to, DailyReport report) {
         for (int i = from; i < to; i++) {
-            // с третьей колонки и до конца
             List<CellData> rowdata = rdata.get(i).getValues();
             if (rowdata != null) {
                 for (CellData cdata : rowdata) {
