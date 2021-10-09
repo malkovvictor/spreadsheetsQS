@@ -22,8 +22,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ReportChecker {
-    private static String APP_NAME = "TRON Report Checker";
-    private static JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+    private static final String APP_NAME = "TRON Report Checker";
+    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
 
     private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
