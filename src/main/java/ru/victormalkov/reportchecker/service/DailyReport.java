@@ -13,7 +13,14 @@ public class DailyReport {
         }
     }
 
+    public ArrayList<Day> getDays() {
+        return days;
+    }
+
     public void pushDay(Day day) {
+        if (days == null) {
+            days = new ArrayList<>();
+        }
         days.add(day);
     }
 }
