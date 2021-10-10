@@ -101,7 +101,7 @@ public class ReportChecker {
                     }
                     System.out.println("Borders: " + border1 + ", " + border2);
 
-                    DailyReport report = new DailyReport();
+                    Day report = new Day();
 
                     if (border1 == null || border2 == null) {
                         System.out.println("not all borders found -- cannot parse this sheet");
@@ -117,7 +117,7 @@ public class ReportChecker {
         }
     }
 
-    private static void doCount(List<RowData> rdata, int from, int to, DailyReport report) {
+    private static void doCount(List<RowData> rdata, int from, int to, Day report) {
         for (int i = from; i < to; i++) {
             List<CellData> rowdata = rdata.get(i).getValues();
             if (rowdata != null) {

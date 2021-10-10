@@ -1,6 +1,6 @@
 package ru.victormalkov;
 
-public class DailyReport {
+public class Day {
     int dayCache = 0;
     int dayOnline = 0;
     int dayTerminal = 0;
