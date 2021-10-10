@@ -1,13 +1,13 @@
 package ru.victormalkov.reportchecker.service;
 
 public class Day {
-    String name;
-    int dayCache = 0;
-    int dayOnline = 0;
-    int dayTerminal = 0;
-    int nightCache = 0;
-    int nightOnline = 0;
-    int nightTerminal = 0;
+    private String name;
+    private int dayCache = 0;
+    private int dayOnline = 0;
+    private int dayTerminal = 0;
+    private int nightCache = 0;
+    private int nightOnline = 0;
+    private int nightTerminal = 0;
 
     public int getDayOnline() {
         return dayOnline;
@@ -67,5 +67,35 @@ public class Day {
                 ", nightOnline=" + nightOnline +
                 ", nightTerminal=" + nightTerminal +
                 '}';
+    }
+
+    public String toPrettyString() {
+        StringBuilder s = new StringBuilder();
+        s.append(name);
+        s.append(System.lineSeparator());
+        s.append("ДЕНЬ");
+        s.append("\tНаличные: ");
+        s.append(getDayCache());
+        s.append("\tПеревод: ");
+        s.append(getDayOnline());
+        s.append("\tТерминал: ");
+        s.append(getDayTerminal());
+        s.append(System.lineSeparator());
+        s.append("НОЧЬ");
+        s.append("\tНаличные: ");
+        s.append(getNightCache());
+        s.append("\tПеревод: ");
+        s.append(getNightOnline());
+        s.append("\tТерминал: ");
+        s.append(getNightTerminal());
+        s.append(System.lineSeparator());
+        s.append("------------------------------------------");
+        s.append(System.lineSeparator());
+
+        return s.toString();
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

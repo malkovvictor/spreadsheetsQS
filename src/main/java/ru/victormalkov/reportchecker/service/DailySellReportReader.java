@@ -73,6 +73,7 @@ public class DailySellReportReader {
                     logger.info("Borders: " + border1 + ", " + border2);
 
                     Day report = new Day();
+                    report.setName(sheet.getProperties().getTitle());
 
                     if (border1 == null || border2 == null) {
                         logger.warn("not all borders found -- cannot parse this sheet");

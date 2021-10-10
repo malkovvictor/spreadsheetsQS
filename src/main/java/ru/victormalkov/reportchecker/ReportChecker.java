@@ -15,7 +15,7 @@ public class ReportChecker {
         DailySellReportReader sellReportReader = new DailySellReportReader();
         DailyReport report = sellReportReader.readReport(spreadsheetId);
         for (Day d : report.getDays()) {
-            System.out.println(d);
+            System.out.print(d.toPrettyString());
         }
 
     }
