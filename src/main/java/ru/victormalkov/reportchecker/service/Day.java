@@ -1,6 +1,7 @@
 package ru.victormalkov.reportchecker.service;
 
 public class Day {
+    String name;
     int dayCache = 0;
     int dayOnline = 0;
     int dayTerminal = 0;

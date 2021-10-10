@@ -11,7 +11,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class DailySellReportReader {
+    private static final Logger logger = LogManager.getLogger(AuthUtil.APP_NAME);
+
     private static final String regexprCache = "(\\d+)(?![ТTЮтю0-9])";
     private static final String regexprOnline = "(\\d+)(?=[Юю])";
     private static final String regexprTerminal = "(\\d+)(?=[ТTт])";
@@ -32,14 +37,14 @@ public class DailySellReportReader {
 
         List<Sheet> sheets = spreadsheet.getSheets();
         for (Sheet sheet : sheets) {
-            System.out.println("Sheet: " + sheet.getProperties().getTitle());
+            logger.info("Sheet: " + sheet.getProperties().getTitle());
             GridData data = sheet.getData().get(0);
             if (data == null) {
-                System.out.println("No data found");
+                logger.warn("No data sound");
             } else {
                 List<RowData> rdata = data.getRowData();
                 if (rdata == null || rdata.size() < 2) {
-                    System.out.println("Too few rows");
+                    logger.warn("Too few rows");
                 } else {
                     Integer border1 = null;
                     Integer border2 = null;
@@ -65,18 +70,16 @@ public class DailySellReportReader {
                             }
                         }
                     }
-                    System.out.println("Borders: " + border1 + ", " + border2);
+                    logger.info("Borders: " + border1 + ", " + border2);
 
                     Day report = new Day();
 
                     if (border1 == null || border2 == null) {
-                        System.out.println("not all borders found -- cannot parse this sheet");
+                        logger.warn("not all borders found -- cannot parse this sheet");
                     } else {
                         doCount(rdata, 2, border1, report);
                         doCount(rdata, border1, border2, report);
                         doCount(rdata, border2 + 1, rdata.size(), report);
-
-                        System.out.println(report);
                         result.pushDay(report);
                     }
                 }
