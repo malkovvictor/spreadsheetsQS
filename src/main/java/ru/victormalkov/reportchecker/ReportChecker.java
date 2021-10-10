@@ -1,4 +1,4 @@
-package ru.victormalkov;
+package ru.victormalkov.reportchecker;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -13,6 +13,7 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.*;
+import ru.victormalkov.reportchecker.service.Day;
 
 import java.io.*;
 import java.security.GeneralSecurityException;

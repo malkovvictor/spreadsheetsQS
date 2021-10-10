@@ -1,4 +1,4 @@
-package ru.victormalkov;
+package ru.victormalkov.reportchecker.service;
 
 public class Day {
     int dayCache = 0;

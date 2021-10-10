@@ -1,4 +1,4 @@
-package ru.victormalkov;
+package ru.victormalkov.reportchecker;
 
 import javafx.application.Application;
 import javafx.stage.Stage;

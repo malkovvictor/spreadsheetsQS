@@ -1,4 +1,4 @@
-package ru.victormalkov;
+package ru.victormalkov.reportchecker.service;
 
 import java.util.ArrayList;
 

@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.victormalkov.UI">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.victormalkov.reportchecker.UI">
    <children>
       <Label layoutX="20.0" layoutY="25.0" text="Файл отчёта по продажам" />
       <TextField layoutX="112.0" layoutY="16.0" prefHeight="26.0" prefWidth="474.0" text="ссылка" />
