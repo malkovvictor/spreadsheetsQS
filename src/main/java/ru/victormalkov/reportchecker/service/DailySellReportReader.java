@@ -132,6 +132,9 @@ public class DailySellReportReader {
                 for (CellData cdata : rowdata) {
                     if (isBlue(cdata) || isGreen(cdata)) {
                         String s = cdata.getFormattedValue();
+                        if (s == null || s.isEmpty()) {
+                            continue;
+                        }
                         Matcher m = pcache.matcher(s);
                         while (m.find()) {
                             if (isBlue(cdata)) {
