@@ -1,18 +1,15 @@
 package ru.victormalkov.reportchecker.service;
 
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class DailySellReportReader {
     private static final Logger logger = LogManager.getLogger(AuthUtil.APP_NAME);
@@ -26,12 +23,9 @@ public class DailySellReportReader {
 
     public DailyReport readReport(String spreadsheetId) throws GeneralSecurityException, IOException {
         DailyReport result = new DailyReport();
-        final NetHttpTransport transport = GoogleNetHttpTransport.newTrustedTransport();
-        Sheets service = new Sheets.Builder(transport, AuthUtil.JSON_FACTORY, AuthUtil.getCredentials(transport))
-                .setApplicationName(AuthUtil.APP_NAME)
-                .build();
+        Sheets sheetsService = AuthUtil.getSheetsService();
 
-        Spreadsheet spreadsheet = service.spreadsheets().get(spreadsheetId)
+        Spreadsheet spreadsheet = sheetsService.spreadsheets().get(spreadsheetId)
                 .setIncludeGridData(true)
                 .execute();
 
