@@ -7,7 +7,8 @@ plugins {
 group 'ru.victormalkov'
 version '1.0-SNAPSHOT'
 
-mainClassName = 'ru.victormalkov.reportchecker.ReportChecker'
+//mainClassName = 'ru.victormalkov.reportchecker.ReportChecker'
+mainClassName = 'ru.victormalkov.reportchecker.ui.ReportCheckerUI'
 
 repositories {
     mavenCentral()
