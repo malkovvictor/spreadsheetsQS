@@ -13,7 +13,7 @@ import ru.victormalkov.reportchecker.service.DriveFile;
 import java.io.IOException;
 import java.util.List;
 
-public class FileChooseForm {
+public class FileChooseFormController {
     @FXML
     private ListView<DriveFile> fileListView;
 
@@ -26,11 +26,9 @@ public class FileChooseForm {
                 .setOrderBy("modifiedTime desc").execute();
         List<File> files = result.getFiles();
         if (files == null || files.isEmpty()) {
-            System.out.println("No files found.");
+            System.err.println("No files found.");
         } else {
-            System.out.println("Files:");
             for (File file : files) {
-              //  System.out.printf("%s (%s)\n", file.getName(), file.getId());
                 observableList.add(new DriveFile(file.getName(), file.getId()));
             }
         }
