@@ -5,6 +5,7 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import ru.victormalkov.reportchecker.service.AuthUtil;
@@ -34,5 +35,9 @@ public class FileChooseFormController {
         }
 
         fileListView.setItems(observableList);
+    }
+
+    private void click(ActionEvent e) {
+
     }
 }
