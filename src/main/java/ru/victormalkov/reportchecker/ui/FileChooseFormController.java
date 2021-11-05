@@ -37,7 +37,11 @@ public class FileChooseFormController {
         fileListView.setItems(observableList);
     }
 
-    private void click(ActionEvent e) {
-
+    @FXML
+    private void click(ActionEvent e) throws IOException {
+        if (fileListView.getSelectionModel().getSelectedItems().size() == 1) {
+            ReportCheckerUI.spreadsheetId = fileListView.getSelectionModel().getSelectedItems().get(0).getId();
+            ReportCheckerUI.instance.changeScene("/forms/ResultForm.fxml");
+        }
     }
 }

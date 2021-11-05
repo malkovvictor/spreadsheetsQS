@@ -7,6 +7,6 @@
    <children>
       <Label layoutX="36.0" layoutY="16.0" text="Файл с отчётом" />
       <ListView fx:id="fileListView" layoutX="36.0" layoutY="49.0" prefHeight="302.0" prefWidth="539.0" />
-      <Button layoutX="36.0" layoutY="360.0" mnemonicParsing="false" text="Посчитать" />
+      <Button layoutX="36.0" layoutY="360.0" mnemonicParsing="false" onAction="#click" text="Посчитать" />
    </children>
 </AnchorPane>
