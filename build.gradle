@@ -9,7 +9,8 @@ group 'ru.victormalkov'
 version '1.0-SNAPSHOT'
 
 //mainClassName = 'ru.victormalkov.reportchecker.ReportChecker'
-mainClassName = 'ru.victormalkov.reportchecker.ui.ReportCheckerUI'
+//mainClassName = 'ru.victormalkov.reportchecker.ui.ReportCheckerUI'
+mainClassName = 'ru.victormalkov.reportchecker.ui.Starter'
 
 repositories {
     mavenCentral()
@@ -42,10 +43,10 @@ test {
 
 shadowJar {
     manifest {
-        attributes 'Main-Class': 'ru.victormalkov.reportchecker.ui.ReportCheckerUI'
+        attributes 'Main-Class': 'ru.victormalkov.reportchecker.ui.Starter'
     }
 }
-
+/*
 jar {
     manifest {
         attributes 'Main-Class': 'ru.victormalkov.reportchecker.ui.ReportCheckerUI'
@@ -53,4 +54,4 @@ jar {
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-}
+}*/
