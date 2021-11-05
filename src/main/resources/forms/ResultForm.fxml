@@ -4,5 +4,5 @@
 <?import javafx.scene.layout.*?>
 
 <VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.victormalkov.reportchecker.ui.ResultFormController">
-      <TextArea fx:id="myTextArea" prefHeight="432.0" prefWidth="620.0" maxWidth="1.7976931348623157E308"  maxHeight="1.7976931348623157E308" />
+      <TextArea fx:id="myTextArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="432.0" prefWidth="620.0" VBox.vgrow="ALWAYS" />
 </VBox>
