@@ -3,8 +3,10 @@ package ru.victormalkov.reportchecker.ui;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -21,20 +23,39 @@ public class FileChooseFormController {
     private ObservableList<DriveFile> observableList = FXCollections.observableArrayList();
 
     public void initialize() throws IOException {
-        Drive driveService = AuthUtil.getDriveService();
-        FileList result = driveService.files().list()
-                .setQ("mimeType='application/vnd.google-apps.spreadsheet'")
-                .setOrderBy("modifiedTime desc").execute();
-        List<File> files = result.getFiles();
-        if (files == null || files.isEmpty()) {
-            System.err.println("No files found.");
-        } else {
-            for (File file : files) {
-                observableList.add(new DriveFile(file.getName(), file.getId()));
-            }
-        }
+        Task task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                Drive driveService = null;
+                try {
+                    driveService = AuthUtil.getDriveService();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.exit(1);
+                }
+                FileList result = null;
+                try {
+                    result = driveService.files().list()
+                            .setQ("mimeType='application/vnd.google-apps.spreadsheet'")
+                            .setOrderBy("modifiedTime desc").execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.exit(2);
+                }
+                List<File> files = result.getFiles();
+                if (files == null || files.isEmpty()) {
+                    System.err.println("No files found.");
+                } else {
+                    for (File file : files) {
+                        observableList.add(new DriveFile(file.getName(), file.getId()));
+                    }
+                }
 
-        fileListView.setItems(observableList);
+                fileListView.setItems(observableList);
+                return null;
+            }
+        };
+        new Thread(task).start();
     }
 
     @FXML
