@@ -32,6 +32,7 @@ public class DailySellReportReader {
         List<Sheet> sheets = spreadsheet.getSheets();
         for (Sheet sheet : sheets) {
             logger.info("Sheet: " + sheet.getProperties().getTitle());
+            logger.info("id: " + sheet.getProperties().getSheetId());
             GridData data = sheet.getData().get(0);
             if (data == null) {
                 logger.warn("No data sound");

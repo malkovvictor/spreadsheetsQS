@@ -22,7 +22,7 @@ public class FileChooseFormController {
 
     private ObservableList<DriveFile> observableList = FXCollections.observableArrayList();
 
-    public void initialize() throws IOException {
+    private void loadFileList() {
         Task task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -58,11 +58,21 @@ public class FileChooseFormController {
         new Thread(task).start();
     }
 
+    public void initialize() {
+        loadFileList();
+    }
+
     @FXML
     private void click(ActionEvent e) throws IOException {
         if (fileListView.getSelectionModel().getSelectedItems().size() == 1) {
             ReportCheckerUI.spreadsheetId = fileListView.getSelectionModel().getSelectedItems().get(0).getId();
             ReportCheckerUI.instance.changeScene("/forms/ResultForm.fxml");
+        }
+    }
+
+    private void copy1page(ActionEvent e) throws IOException {
+        if (fileListView.getSelectionModel().getSelectedItems().size() == 1) {
+            String spreadsheetId = fileListView.getSelectionModel().getSelectedItems().get(0).getId();
         }
     }
 }
