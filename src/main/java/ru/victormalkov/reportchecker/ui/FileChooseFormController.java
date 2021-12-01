@@ -18,7 +18,7 @@ import java.util.List;
 
 public class FileChooseFormController {
     @FXML
-    private ListView<DriveFile> fileListView;
+    ListView<DriveFile> fileListView;
 
     private ObservableList<DriveFile> observableList = FXCollections.observableArrayList();
 
@@ -55,7 +55,9 @@ public class FileChooseFormController {
                 return null;
             }
         };
-        new Thread(task).start();
+
+        Platform.runLater(task);
+        //new Thread(task).start();
     }
 
     @FXML
