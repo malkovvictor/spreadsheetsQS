@@ -23,7 +23,7 @@ public class FileChooseFormController {
     private ObservableList<DriveFile> observableList = FXCollections.observableArrayList();
 
     public void initialize() throws IOException {
-        fileListView.setItems(observableList);
+        Platform.runLater(() -> fileListView.setItems(observableList));
 
         Task task = new Task<Void>() {
             @Override
