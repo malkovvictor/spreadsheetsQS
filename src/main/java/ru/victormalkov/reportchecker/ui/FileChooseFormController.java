@@ -20,12 +20,12 @@ public class FileChooseFormController {
     @FXML
     ListView<DriveFile> fileListView;
 
-    private ObservableList<DriveFile> observableList = FXCollections.observableArrayList();
+    private final ObservableList<DriveFile> observableList = FXCollections.observableArrayList();
 
     private void loadFileList() {
-        Task task = new Task<Void>() {
+        Task<Void> task = new Task<Void>() {
             @Override
-            protected Void call() throws Exception {
+            protected Void call() {
                 Drive driveService = null;
                 try {
                     driveService = AuthUtil.getDriveService();
@@ -70,7 +70,7 @@ public class FileChooseFormController {
     }
 
     @FXML
-    public void copy1page(ActionEvent e) throws IOException {
+    public void copy1page(ActionEvent e) {
         if (fileListView.getSelectionModel().getSelectedItems().size() == 1) {
             String spreadsheetId = fileListView.getSelectionModel().getSelectedItems().get(0).getId();
         }

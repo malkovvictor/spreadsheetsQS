@@ -1,8 +1,10 @@
 package ru.victormalkov.reportchecker.service;
 
+import java.util.Objects;
+
 public class DriveFile {
-    private String name;
-    private String id;
+    private final String name;
+    private final String id;
 
     @Override
     public boolean equals(Object o) {
@@ -11,7 +13,7 @@ public class DriveFile {
 
         DriveFile driveFile = (DriveFile) o;
 
-        return id != null ? id.equals(driveFile.id) : driveFile.id == null;
+        return Objects.equals(id, driveFile.id);
     }
 
     @Override
