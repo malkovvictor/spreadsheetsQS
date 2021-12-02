@@ -30,20 +30,20 @@ public class ResultFormController {
             protected Void call() throws Exception {
                 DailySellReportReader sellReportReader = new DailySellReportReader();
                 DailyReport report = sellReportReader.readReport(spreadsheetId);
+                StringBuilder text = new StringBuilder();
                 for (Day d : report.getDays()) {
-                    myTextArea.appendText(d.toPrettyString());
+                    text.append(d.toPrettyString());
                 }
+                Platform.runLater(() -> myTextArea.appendText(text.toString()));
                 return null;
             }
 
             @Override
             protected void succeeded() {
                 super.succeeded();
-                labelIsCounting.setVisible(false);
+                Platform.runLater(() -> labelIsCounting.setVisible(false));
             }
         };
-//        new Thread(task).start();
-
-        Platform.runLater(task);
+        new Thread(task).start();
     }
 }

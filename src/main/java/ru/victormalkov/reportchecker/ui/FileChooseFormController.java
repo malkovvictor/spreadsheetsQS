@@ -23,6 +23,8 @@ public class FileChooseFormController {
     private ObservableList<DriveFile> observableList = FXCollections.observableArrayList();
 
     public void initialize() throws IOException {
+        fileListView.setItems(observableList);
+
         Task task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -51,13 +53,11 @@ public class FileChooseFormController {
                     }
                 }
 
-                fileListView.setItems(observableList);
                 return null;
             }
         };
 
-        Platform.runLater(task);
-        //new Thread(task).start();
+        new Thread(task).start();
     }
 
     @FXML
