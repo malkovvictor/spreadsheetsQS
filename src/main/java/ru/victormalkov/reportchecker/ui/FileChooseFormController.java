@@ -57,7 +57,7 @@ public class FileChooseFormController {
     }
 
     public void initialize() {
-        fileListView.setItems(observableList);
+        Platform.runLater(() -> fileListView.setItems(observableList));
         loadFileList();
     }
 
