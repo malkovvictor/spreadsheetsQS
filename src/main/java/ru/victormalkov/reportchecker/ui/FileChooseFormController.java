@@ -69,8 +69,8 @@ public class FileChooseFormController {
         }
     }
 
-
-    private void copy1page(ActionEvent e) throws IOException {
+    @FXML
+    public void copy1page(ActionEvent e) throws IOException {
         if (fileListView.getSelectionModel().getSelectedItems().size() == 1) {
             String spreadsheetId = fileListView.getSelectionModel().getSelectedItems().get(0).getId();
         }
