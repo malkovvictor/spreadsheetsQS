@@ -18,7 +18,7 @@ import java.util.List;
 
 public class FileChooseFormController {
     @FXML
-    private ListView<DriveFile> fileListView;
+    ListView<DriveFile> fileListView;
 
     private ObservableList<DriveFile> observableList = FXCollections.observableArrayList();
 
@@ -50,8 +50,6 @@ public class FileChooseFormController {
                         observableList.add(new DriveFile(file.getName(), file.getId()));
                     }
                 }
-
-                fileListView.setItems(observableList);
                 return null;
             }
         };
@@ -59,6 +57,7 @@ public class FileChooseFormController {
     }
 
     public void initialize() {
+        fileListView.setItems(observableList);
         loadFileList();
     }
 
@@ -69,6 +68,7 @@ public class FileChooseFormController {
             ReportCheckerUI.instance.changeScene("/forms/ResultForm.fxml");
         }
     }
+
 
     private void copy1page(ActionEvent e) throws IOException {
         if (fileListView.getSelectionModel().getSelectedItems().size() == 1) {

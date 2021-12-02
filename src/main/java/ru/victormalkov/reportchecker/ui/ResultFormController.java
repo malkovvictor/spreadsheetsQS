@@ -1,5 +1,6 @@
 package ru.victormalkov.reportchecker.ui;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -13,10 +14,10 @@ import java.security.GeneralSecurityException;
 
 public class ResultFormController {
     @FXML
-    private TextArea myTextArea;
+    TextArea myTextArea;
 
     @FXML
-    private Label labelIsCounting;
+    Label labelIsCounting;
 
     public void initialize() throws IOException, GeneralSecurityException {
         final String spreadsheetId = ReportCheckerUI.spreadsheetId;
@@ -29,16 +30,18 @@ public class ResultFormController {
             protected Void call() throws Exception {
                 DailySellReportReader sellReportReader = new DailySellReportReader();
                 DailyReport report = sellReportReader.readReport(spreadsheetId);
+                StringBuilder text = new StringBuilder();
                 for (Day d : report.getDays()) {
-                    myTextArea.appendText(d.toPrettyString());
+                    text.append(d.toPrettyString());
                 }
+                Platform.runLater(() -> myTextArea.appendText(text.toString()));
                 return null;
             }
 
             @Override
             protected void succeeded() {
                 super.succeeded();
-                labelIsCounting.setVisible(false);
+                Platform.runLater(() -> labelIsCounting.setVisible(false));
             }
         };
         new Thread(task).start();
