@@ -15,7 +15,7 @@ import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import org.apache.logging.log4j.LogManager;
-import ru.victormalkov.reportchecker.ReportChecker;
+import ru.victormalkov.reportchecker.ui.Starter;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
@@ -26,7 +26,7 @@ public class AuthUtil {
     public static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
 
-    private static final List<String> SCOPES = List.of(SheetsScopes.SPREADSHEETS_READONLY, DriveScopes.DRIVE_METADATA_READONLY);
+    private static final List<String> SCOPES = List.of(SheetsScopes.SPREADSHEETS, DriveScopes.DRIVE_METADATA_READONLY);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
     private static NetHttpTransport transport = null;
@@ -42,7 +42,7 @@ public class AuthUtil {
 
 
     public static Credential getCredentials(final NetHttpTransport transport) throws IOException {
-        InputStream in = ReportChecker.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+        InputStream in = Starter.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
         if (null == in) {
             throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
         }

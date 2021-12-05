@@ -14,10 +14,6 @@ public class ReportCheckerUI extends Application {
 
     private Stage primaryStage;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;

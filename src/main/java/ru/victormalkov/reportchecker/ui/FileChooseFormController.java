@@ -9,9 +9,11 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import ru.victormalkov.reportchecker.service.AuthUtil;
 import ru.victormalkov.reportchecker.service.DriveFile;
+import ru.victormalkov.reportchecker.service.PageCopyUtil;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,7 +33,14 @@ public class FileChooseFormController {
                     driveService = AuthUtil.getDriveService();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    System.exit(1);
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Подключение к Google Drive");
+                        alert.setHeaderText("Ошибочка вышла!");
+                        alert.setContentText(e.getLocalizedMessage());
+                        alert.showAndWait();
+                        System.exit(1);
+                    });
                 }
                 FileList result = null;
                 try {
@@ -40,7 +49,14 @@ public class FileChooseFormController {
                             .setOrderBy("modifiedTime desc").execute();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    System.exit(2);
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Загрузка списка файлов");
+                        alert.setHeaderText("Ошибочка вышла!");
+                        alert.setContentText(e.getLocalizedMessage());
+                        alert.showAndWait();
+                        System.exit(2);
+                    });
                 }
                 List<File> files = result.getFiles();
                 if (files == null || files.isEmpty()) {
@@ -70,9 +86,24 @@ public class FileChooseFormController {
     }
 
     @FXML
-    public void copy1page(ActionEvent e) {
+    public void copy1page(ActionEvent e) throws IOException {
         if (fileListView.getSelectionModel().getSelectedItems().size() == 1) {
             String spreadsheetId = fileListView.getSelectionModel().getSelectedItems().get(0).getId();
+            try {
+                PageCopyUtil.copy1Page(spreadsheetId);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Создание страниц");
+                alert.setHeaderText(null);
+                alert.setContentText("Сделано");
+                alert.showAndWait();
+            } catch (IOException ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Создание страниц");
+                alert.setHeaderText("Ошибочка вышла!");
+                alert.setContentText(ex.getLocalizedMessage());
+                alert.showAndWait();
+            }
         }
     }
 }

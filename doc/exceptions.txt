@@ -1,0 +1,21 @@
+com.google.api.client.auth.oauth2.TokenResponseException: 400 Bad Request
+{
+  "error" : "invalid_grant",
+  "error_description" : "Bad Request"
+}
+
+
+
+
+
+Caused by: com.google.api.client.googleapis.json.GoogleJsonResponseException: 403 Forbidden
+{
+  "code" : 403,
+  "errors" : [ {
+    "domain" : "global",
+    "message" : "Insufficient Permission",
+    "reason" : "insufficientPermissions"
+  } ],
+  "message" : "Request had insufficient authentication scopes.",
+  "status" : "PERMISSION_DENIED"
+}
