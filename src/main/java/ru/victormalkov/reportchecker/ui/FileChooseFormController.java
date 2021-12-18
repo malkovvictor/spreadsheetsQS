@@ -90,12 +90,12 @@ public class FileChooseFormController {
         if (fileListView.getSelectionModel().getSelectedItems().size() == 1) {
             String spreadsheetId = fileListView.getSelectionModel().getSelectedItems().get(0).getId();
             try {
-                PageCopyUtil.copy1Page(spreadsheetId);
+                int created = PageCopyUtil.copy1Page(spreadsheetId);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Создание страниц");
                 alert.setHeaderText(null);
-                alert.setContentText("Сделано");
+                alert.setContentText("Создано страниц: " + created);
                 alert.showAndWait();
             } catch (IOException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
