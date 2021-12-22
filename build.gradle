@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'ru.victormalkov'
-version '1.1a'
+version '1.2'
 
 //mainClassName = 'ru.victormalkov.reportchecker.ReportChecker'
 //mainClassName = 'ru.victormalkov.reportchecker.ui.ReportCheckerUI'
