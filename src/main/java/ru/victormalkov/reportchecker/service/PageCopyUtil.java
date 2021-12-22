@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import java.io.IOException;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,7 +24,7 @@ public class PageCopyUtil {
     public static int copy1Page(String spreadsheetId) throws IOException {
         Sheets sheetsService = AuthUtil.getSheetsService();
         BatchUpdateSpreadsheetRequest batchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest();
-        List<Request> requests = new ArrayList<>();
+        final List<Request> requests = new ArrayList<>();
         Spreadsheet spreadsheet = sheetsService.spreadsheets().get(spreadsheetId)
                 .setIncludeGridData(true)
                 .execute();
@@ -70,12 +71,40 @@ public class PageCopyUtil {
             requestBody.setSourceSheetId(sheetId);
             requestBody.setInsertSheetIndex(i);
             requests.add(new Request().setDuplicateSheet(requestBody));
+
         }
 
         batchUpdateSpreadsheetRequest.setRequests(requests);
         Sheets.Spreadsheets.BatchUpdate request = sheetsService.spreadsheets().batchUpdate(spreadsheetId, batchUpdateSpreadsheetRequest);
-
         BatchUpdateSpreadsheetResponse response = request.execute();
+        // TODO: check response
+
+
+        spreadsheet = sheetsService.spreadsheets().get(spreadsheetId)
+                .setIncludeGridData(true)
+                .execute();
+        final List<Request> requests2 = new ArrayList<>();
+        batchUpdateSpreadsheetRequest = new BatchUpdateSpreadsheetRequest();
+        sheets = spreadsheet.getSheets();
+        sheets.forEach(sheet -> {
+            UpdateCellsRequest updRequestBody = new UpdateCellsRequest();
+            CellData data = new CellData();
+            data.setUserEnteredValue(new ExtendedValue().setStringValue(sheet.getProperties().getTitle()));
+            updRequestBody.setRange(
+                    new GridRange()
+                            .setSheetId(sheet.getProperties().getSheetId())
+                            .setStartColumnIndex(0)
+                            .setStartRowIndex(0)
+                            .setEndColumnIndex(1)
+                            .setEndRowIndex(1)
+            );
+            updRequestBody.setFields("*");
+            updRequestBody.setRows(Arrays.asList(new RowData().setValues(Arrays.asList(data))));
+            requests2.add(new Request().setUpdateCells(updRequestBody));
+        });
+        batchUpdateSpreadsheetRequest.setRequests(requests2);
+        request = sheetsService.spreadsheets().batchUpdate(spreadsheetId, batchUpdateSpreadsheetRequest);
+        response = request.execute();
 
         return lengthOfMonth - 1;
     }
