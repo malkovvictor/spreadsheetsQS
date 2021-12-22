@@ -90,6 +90,14 @@ public class PageCopyUtil {
             UpdateCellsRequest updRequestBody = new UpdateCellsRequest();
             CellData data = new CellData();
             data.setUserEnteredValue(new ExtendedValue().setStringValue(sheet.getProperties().getTitle()));
+            data.setUserEnteredFormat(new CellFormat()
+                    .setHorizontalAlignment("center")
+                    .setTextFormat(
+                            new TextFormat()
+                                    .setFontSize(18)
+                                    .setFontFamily("Times New Roman")
+                    )
+            );
             updRequestBody.setRange(
                     new GridRange()
                             .setSheetId(sheet.getProperties().getSheetId())
@@ -100,6 +108,7 @@ public class PageCopyUtil {
             );
             updRequestBody.setFields("*");
             updRequestBody.setRows(Arrays.asList(new RowData().setValues(Arrays.asList(data))));
+
             requests2.add(new Request().setUpdateCells(updRequestBody));
         });
         batchUpdateSpreadsheetRequest.setRequests(requests2);
