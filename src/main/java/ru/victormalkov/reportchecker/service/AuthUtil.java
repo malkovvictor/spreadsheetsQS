@@ -14,6 +14,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import ru.victormalkov.reportchecker.ui.Starter;
 
@@ -31,6 +32,8 @@ public class AuthUtil {
 
     private static NetHttpTransport transport = null;
 
+    public static final int MAX_RETRIES = 2;
+
     static {
         try {
             transport = GoogleNetHttpTransport.newTrustedTransport();
@@ -40,6 +43,15 @@ public class AuthUtil {
         }
     }
 
+    public static void cleanCredentials() {
+        System.out.println("deleting: " + new File(TOKENS_DIRECTORY_PATH).getAbsolutePath());
+        try {
+            FileUtils.deleteDirectory(new File(TOKENS_DIRECTORY_PATH));
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
 
     public static Credential getCredentials(final NetHttpTransport transport) throws IOException {
         InputStream in = Starter.class.getResourceAsStream(CREDENTIALS_FILE_PATH);

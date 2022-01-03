@@ -28,43 +28,56 @@ public class FileChooseFormController {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() {
-                Drive driveService = null;
-                try {
-                    driveService = AuthUtil.getDriveService();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Подключение к Google Drive");
-                        alert.setHeaderText("Ошибочка вышла!");
-                        alert.setContentText(e.getLocalizedMessage());
-                        alert.showAndWait();
-                        System.exit(1);
-                    });
-                }
-                FileList result = null;
-                try {
-                    result = driveService.files().list()
-                            .setQ("mimeType='application/vnd.google-apps.spreadsheet'")
-                            .setOrderBy("modifiedTime desc").execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Platform.runLater(() -> {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Загрузка списка файлов");
-                        alert.setHeaderText("Ошибочка вышла!");
-                        alert.setContentText(e.getLocalizedMessage());
-                        alert.showAndWait();
-                        System.exit(2);
-                    });
-                }
-                List<File> files = result.getFiles();
-                if (files == null || files.isEmpty()) {
-                    System.err.println("No files found.");
-                } else {
-                    for (File file : files) {
-                        observableList.add(new DriveFile(file.getName(), file.getId()));
+                int attempts = 0;
+                while (++attempts <= AuthUtil.MAX_RETRIES) {
+                    Drive driveService = null;
+                    try {
+                        driveService = AuthUtil.getDriveService();
+                    } catch (IOException e) {
+                        if (attempts < AuthUtil.MAX_RETRIES) {
+                            AuthUtil.cleanCredentials();
+                            continue;
+                        }
+                        e.printStackTrace();
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Подключение к Google Drive");
+                            alert.setHeaderText("Ошибочка вышла!");
+                            alert.setContentText(e.getLocalizedMessage());
+                            alert.showAndWait();
+                            System.exit(1);
+                        });
                     }
+                    FileList result = null;
+                    try {
+                        result = driveService.files().list()
+                                .setQ("mimeType='application/vnd.google-apps.spreadsheet'")
+                                .setOrderBy("modifiedTime desc").execute();
+                    } catch (IOException e) {
+                        if (attempts < AuthUtil.MAX_RETRIES) {
+                            AuthUtil.cleanCredentials();
+                            continue;
+                        }
+                        e.printStackTrace();
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Загрузка списка файлов");
+                            alert.setHeaderText("Ошибочка вышла!");
+                            alert.setContentText(e.getLocalizedMessage());
+                            alert.showAndWait();
+                            System.exit(2);
+                        });
+                    }
+
+                    List<File> files = result.getFiles();
+                    if (files == null || files.isEmpty()) {
+                        System.err.println("No files found.");
+                    } else {
+                        for (File file : files) {
+                            observableList.add(new DriveFile(file.getName(), file.getId()));
+                        }
+                    }
+                    return null;
                 }
                 return null;
             }

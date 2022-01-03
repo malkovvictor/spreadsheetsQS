@@ -32,6 +32,7 @@ dependencies {
     implementation 'com.google.apis:google-api-services-drive:v3-rev110-1.23.0'
 
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.1'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
 
     runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:win"
     runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:linux"
