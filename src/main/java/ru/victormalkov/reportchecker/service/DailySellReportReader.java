@@ -43,6 +43,7 @@ public class DailySellReportReader {
                 } else {
                     Integer border1 = null;
                     Integer border2 = null;
+                    Integer border3 = null;
                     for (int i = 2; i < rdata.size(); i++) {
                         RowData row = rdata.get(i);
                         List<CellData> rowdata = row.getValues();
