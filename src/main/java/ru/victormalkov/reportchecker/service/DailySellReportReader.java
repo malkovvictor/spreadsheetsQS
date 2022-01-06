@@ -50,33 +50,41 @@ public class DailySellReportReader {
                         if (rowdata == null || rowdata.size() < 2) {
                             // nothing
                         } else if (border1 == null) {
-                            CellData cdata = rowdata.get(1);
-                            if ((cdata.getFormattedValue() == null
-                                    || cdata.getFormattedValue().isBlank()
-                                    || isGreen(cdata)
-                                    || isBlue(cdata))
-                                    && border1 == null) {
+                            CellData cdata = rowdata.get(0);
+//                            logger.debug(cdata.getFormattedValue());
+                            if ("  Кальян".equals(cdata.getFormattedValue())) {
+//                            if ((cdata.getFormattedValue() == null
+  //                                  || cdata.getFormattedValue().isBlank()
+    //                                || isGreen(cdata)
+      //                              || isBlue(cdata))) {
                                 border1 = i;
+                            }
+                        } else if (border2 == null) {
+                            CellData cdata = rowdata.get(0);
+                            if ("TRON BLACK\\TRON WHITE".equals(cdata.getFormattedValue())) {
+                                border2 = i;
                             }
                         } else {
                             CellData cdata = rowdata.get(0);
-                            if (isRed(cdata)) {
-                                border2 = i;
+                            if ("VIP\\Bootcamp".equals(cdata.getFormattedValue()) ||
+                                    "VIP\\bootcamp".equals(cdata.getFormattedValue())) {
+                                border3 = i;
                                 break;
                             }
                         }
                     }
-                    logger.info("Borders: " + border1 + ", " + border2);
+                    logger.info("Borders: " + border1 + ", " + border2 + ", " + border3);
 
                     Day report = new Day();
                     report.setName(sheet.getProperties().getTitle());
 
-                    if (border1 == null || border2 == null) {
+                    if (border1 == null || border2 == null || border3 == null) {
                         logger.warn("not all borders found -- cannot parse this sheet");
                     } else {
-                        doCount(rdata, 2, border1, report);
-                        doCount(rdata, border1, border2, report);
-                        doCount(rdata, border2 + 1, rdata.size(), report);
+                        doCount(rdata, 2, border1, report, 2);
+                        doCount(rdata, border1, border2, report, 1);
+                        doCount(rdata, border2 + 2, border3, report, 1);
+                        doCount(rdata, border3 + 2, rdata.size(), report, 1);
                         result.pushDay(report);
                     }
                 }
@@ -121,11 +129,12 @@ public class DailySellReportReader {
         return f == null ? 0 : f;
     }
 
-    private void doCount(List<RowData> rdata, int from, int to, Day report) {
+    private void doCount(List<RowData> rdata, int from, int to, Day report, int fromColumn) {
         for (int i = from; i < to; i++) {
             List<CellData> rowdata = rdata.get(i).getValues();
             if (rowdata != null) {
-                for (CellData cdata : rowdata) {
+                for (int cell = fromColumn; cell < rowdata.size(); cell++) {
+                    CellData cdata = rowdata.get(cell);
                     if (isBlue(cdata) || isGreen(cdata)) {
                         String s = cdata.getFormattedValue();
                         if (s == null || s.isEmpty()) {
