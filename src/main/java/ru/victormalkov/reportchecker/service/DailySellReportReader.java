@@ -49,10 +49,10 @@ public class DailySellReportReader {
                     if (borders.size() != 3) {
                         logger.warn("not all borders found -- cannot parse this sheet");
                     } else {
-                        doCount(rdata, 2, borders.get(1), report, 2);
-                        doCount(rdata, borders.get(1), borders.get(2), report, 1);
-                        doCount(rdata, borders.get(2) + 2, borders.get(3), report, 1);
-                        doCount(rdata, borders.get(3) + 2, rdata.size(), report, 1);
+                        doCount(rdata, 2, borders.get(0), report, 2);
+                        doCount(rdata, borders.get(0), borders.get(1), report, 1);
+                        doCount(rdata, borders.get(1) + 2, borders.get(2), report, 1);
+                        doCount(rdata, borders.get(2) + 2, rdata.size(), report, 1);
                         result.pushDay(report);
                     }
                 }
@@ -70,18 +70,20 @@ public class DailySellReportReader {
                 // nothing
             } else if (borders.size() < 1) {
                 CellData cdata = rowdata.get(0);
-                if ("  Кальян".equals(cdata.getFormattedValue())) {
+                if (cdata.getFormattedValue() != null &&
+                        cdata.getFormattedValue().trim().equalsIgnoreCase("кальян")) {
                     borders.add(i);
                 }
             } else if (borders.size() < 2) {
                 CellData cdata = rowdata.get(0);
-                if ("TRON BLACK\\TRON WHITE".equals(cdata.getFormattedValue())) {
+                if (cdata.getFormattedValue() != null &&
+                        cdata.getFormattedValue().trim().equalsIgnoreCase("TRON BLACK\\TRON WHITE")) {
                     borders.add(i);
                 }
             } else {
                 CellData cdata = rowdata.get(0);
-                if ("VIP\\Bootcamp".equals(cdata.getFormattedValue()) ||
-                        "VIP\\bootcamp".equals(cdata.getFormattedValue())) {
+                if (cdata.getFormattedValue() != null &&
+                        cdata.getFormattedValue().trim().equalsIgnoreCase("VIP\\Bootcamp")) {
                     borders.add(i);
                     break;
                 }
