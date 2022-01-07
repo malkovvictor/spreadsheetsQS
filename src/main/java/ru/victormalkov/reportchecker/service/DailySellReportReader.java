@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,56 +42,53 @@ public class DailySellReportReader {
                 if (rdata == null || rdata.size() < 2) {
                     logger.warn("Too few rows");
                 } else {
-                    Integer border1 = null;
-                    Integer border2 = null;
-                    Integer border3 = null;
-                    for (int i = 2; i < rdata.size(); i++) {
-                        RowData row = rdata.get(i);
-                        List<CellData> rowdata = row.getValues();
-                        if (rowdata == null || rowdata.size() < 2) {
-                            // nothing
-                        } else if (border1 == null) {
-                            CellData cdata = rowdata.get(0);
-//                            logger.debug(cdata.getFormattedValue());
-                            if ("  Кальян".equals(cdata.getFormattedValue())) {
-//                            if ((cdata.getFormattedValue() == null
-  //                                  || cdata.getFormattedValue().isBlank()
-    //                                || isGreen(cdata)
-      //                              || isBlue(cdata))) {
-                                border1 = i;
-                            }
-                        } else if (border2 == null) {
-                            CellData cdata = rowdata.get(0);
-                            if ("TRON BLACK\\TRON WHITE".equals(cdata.getFormattedValue())) {
-                                border2 = i;
-                            }
-                        } else {
-                            CellData cdata = rowdata.get(0);
-                            if ("VIP\\Bootcamp".equals(cdata.getFormattedValue()) ||
-                                    "VIP\\bootcamp".equals(cdata.getFormattedValue())) {
-                                border3 = i;
-                                break;
-                            }
-                        }
-                    }
-                    logger.info("Borders: " + border1 + ", " + border2 + ", " + border3);
-
+                    List<Integer> borders = findBorders(rdata);
                     Day report = new Day();
                     report.setName(sheet.getProperties().getTitle());
 
-                    if (border1 == null || border2 == null || border3 == null) {
+                    if (borders.size() != 3) {
                         logger.warn("not all borders found -- cannot parse this sheet");
                     } else {
-                        doCount(rdata, 2, border1, report, 2);
-                        doCount(rdata, border1, border2, report, 1);
-                        doCount(rdata, border2 + 2, border3, report, 1);
-                        doCount(rdata, border3 + 2, rdata.size(), report, 1);
+                        doCount(rdata, 2, borders.get(1), report, 2);
+                        doCount(rdata, borders.get(1), borders.get(2), report, 1);
+                        doCount(rdata, borders.get(2) + 2, borders.get(3), report, 1);
+                        doCount(rdata, borders.get(3) + 2, rdata.size(), report, 1);
                         result.pushDay(report);
                     }
                 }
             }
         }
         return result;
+    }
+
+    private List<Integer> findBorders(List<RowData> rdata) {
+        List<Integer> borders = new ArrayList<>();
+        for (int i = 2; i < rdata.size(); i++) {
+            RowData row = rdata.get(i);
+            List<CellData> rowdata = row.getValues();
+            if (rowdata == null || rowdata.size() < 2) {
+                // nothing
+            } else if (borders.size() < 1) {
+                CellData cdata = rowdata.get(0);
+                if ("  Кальян".equals(cdata.getFormattedValue())) {
+                    borders.add(i);
+                }
+            } else if (borders.size() < 2) {
+                CellData cdata = rowdata.get(0);
+                if ("TRON BLACK\\TRON WHITE".equals(cdata.getFormattedValue())) {
+                    borders.add(i);
+                }
+            } else {
+                CellData cdata = rowdata.get(0);
+                if ("VIP\\Bootcamp".equals(cdata.getFormattedValue()) ||
+                        "VIP\\bootcamp".equals(cdata.getFormattedValue())) {
+                    borders.add(i);
+                    break;
+                }
+            }
+        }
+        logger.info("borders found: " +  borders.toString());
+        return borders;
     }
 
     public static final double eps = 0.02;
