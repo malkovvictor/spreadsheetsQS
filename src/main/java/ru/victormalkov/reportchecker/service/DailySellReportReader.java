@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -129,6 +131,13 @@ public class DailySellReportReader {
         return f == null ? 0 : f;
     }
 
+    private void findDayAndNight(Matcher m, Consumer<Integer> adder) {
+        while (m.find()) {
+            Integer sum = Integer.parseInt(m.group());
+            adder.accept(sum);
+        }
+    }
+
     private void doCount(List<RowData> rdata, int from, int to, Day report, int fromColumn) {
         for (int i = from; i < to; i++) {
             List<CellData> rowdata = rdata.get(i).getValues();
@@ -140,32 +149,9 @@ public class DailySellReportReader {
                         if (s == null || s.isEmpty()) {
                             continue;
                         }
-                        Matcher m = pcache.matcher(s);
-                        while (m.find()) {
-                            if (isBlue(cdata)) {
-                                report.addDayCache(Integer.parseInt(m.group()));
-                            } else {
-                                report.addNightCache(Integer.parseInt(m.group()));
-                            }
-                        }
-
-                        m = ponline.matcher(s);
-                        while (m.find()) {
-                            if (isBlue(cdata)) {
-                                report.addDayOnline(Integer.parseInt(m.group()));
-                            } else {
-                                report.addNightOnline(Integer.parseInt(m.group()));
-                            }
-                        }
-
-                        m = pterminal.matcher(s);
-                        while (m.find()) {
-                            if (isBlue(cdata)) {
-                                report.addDayTerminal(Integer.parseInt(m.group()));
-                            } else {
-                                report.addNightTerminal(Integer.parseInt(m.group()));
-                            }
-                        }
+                        findDayAndNight(pcache.matcher(s), isBlue(cdata) ?  report::addDayCache : report::addNightCache);
+                        findDayAndNight(ponline.matcher(s), isBlue(cdata) ? report::addDayOnline : report::addNightOnline);
+                        findDayAndNight(pterminal.matcher(s), isBlue(cdata) ? report::addDayTerminal : report::addNightTerminal);
                     }
                 }
             }
