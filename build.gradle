@@ -17,17 +17,17 @@ repositories {
 }
 
 javafx {
-    version = "17.0.0.1"
+    version = "17.0.1"
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
 dependencies {
-    implementation 'ch.qos.logback:logback-classic:1.2.6'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation 'ch.qos.logback:logback-classic:1.2.10'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 
     implementation 'com.google.api-client:google-api-client:1.30.4'
-    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.30.6'
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.32.1'
     implementation 'com.google.apis:google-api-services-sheets:v4-rev581-1.25.0'
     implementation 'com.google.apis:google-api-services-drive:v3-rev110-1.23.0'
 
@@ -36,6 +36,8 @@ dependencies {
 
     runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:win"
     runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:linux"
+
+    implementation 'org.jfxtras:jmetro:11.6.15'
 }
 
 test {
