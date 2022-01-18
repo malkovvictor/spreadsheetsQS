@@ -24,6 +24,10 @@ public class ReportCheckerUI extends Application {
         Parent fileChooseForm = FXMLLoader.load(getClass().getResource("/forms/FileChooseForm.fxml"));
         Scene scene = new Scene(fileChooseForm);
         jMetro.setScene(scene);
+
+        String stylesheet = getClass().getResource("/pibug.css").toExternalForm();
+        scene.getStylesheets().add(stylesheet);
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }

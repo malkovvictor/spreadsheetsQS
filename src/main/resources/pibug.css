@@ -1,0 +1,7 @@
+/*
+https://stackoverflow.com/questions/31008410/javafx-how-to-remove-border-from-progressindicator
+*/
+
+.progress-indicator:indeterminate > .spinner {
+    -fx-border-color: transparent;
+}
