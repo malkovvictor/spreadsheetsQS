@@ -69,6 +69,44 @@ public class Day {
                 '}';
     }
 
+    public String toHTML() {
+        StringBuilder s = new StringBuilder();
+        s.append("<tr><td colspan='3'>");
+          s.append(name);
+        s.append("</td></tr>");
+        s.append(System.lineSeparator());
+        s.append("<tr>");
+        s.append("<td></td><td>ДЕНЬ</td><td>НОЧЬ</td>");
+        s.append("</tr>");
+        s.append(System.lineSeparator());
+        s.append("<tr>");
+        s.append("<td>Наличные</td><td>");
+        s.append(getDayCache());
+        s.append("</td><td>");
+        s.append(getNightCache());
+        s.append("</td></tr>");
+        s.append(System.lineSeparator());
+        s.append("<tr>");
+        s.append("<td>Перевод</td><td>");
+        s.append(getDayOnline());
+        s.append("</td><td>");
+        s.append(getNightOnline());
+        s.append("</td></tr>");
+        s.append(System.lineSeparator());
+        s.append("<tr>");
+        s.append("<td>Терминал</td><td>");
+        s.append(getDayTerminal());
+        s.append("</td><td>");
+        s.append(getNightTerminal());
+        s.append("</td></tr>");
+        s.append(System.lineSeparator());
+//        s.append("------------------------------------------");
+//        s.append(System.lineSeparator());
+
+        s.append("</tr>");
+        return s.toString();
+    }
+
     public String toPrettyString() {
         StringBuilder s = new StringBuilder();
         s.append(name);

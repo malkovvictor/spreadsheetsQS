@@ -5,13 +5,15 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
+import javafx.scene.web.HTMLEditor;
+import javafx.scene.web.WebView;
 import ru.victormalkov.reportchecker.service.DailyReport;
 import ru.victormalkov.reportchecker.service.DailySellReportReader;
 import ru.victormalkov.reportchecker.service.Day;
 
 public class ResultFormController {
     @FXML
-    TextArea myTextArea;
+    WebView myTextView;
 
     @FXML
     ProgressIndicator progressIndicator;
@@ -27,11 +29,13 @@ public class ResultFormController {
             protected Void call() throws Exception {
                 DailySellReportReader sellReportReader = new DailySellReportReader();
                 DailyReport report = sellReportReader.readReport(spreadsheetId);
-                StringBuilder text = new StringBuilder();
+                StringBuilder text = new StringBuilder("<html><body><table>");
                 for (Day d : report.getDays()) {
-                    text.append(d.toPrettyString());
+                    text.append(d.toHTML());
                 }
-                Platform.runLater(() -> myTextArea.appendText(text.toString()));
+                //Platform.runLater(() -> myTextArea.  .appendText(text.toString()));
+                text.append("</table></body></html>");
+                Platform.runLater(() -> myTextView.getEngine().loadContent(text.toString()));
                 return null;
             }
 
