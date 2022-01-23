@@ -8,8 +8,9 @@ plugins {
 group 'ru.victormalkov'
 version '2'
 
-//noinspection GroovyUnusedAssignment
-mainClassName = 'ru.victormalkov.reportchecker.ui.Starter'
+application {
+    mainClass = 'ru.victormalkov.reportchecker.ui.Starter'
+}
 
 repositories {
     mavenCentral()
