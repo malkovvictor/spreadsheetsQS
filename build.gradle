@@ -8,8 +8,7 @@ plugins {
 group 'ru.victormalkov'
 version '2'
 
-//mainClassName = 'ru.victormalkov.reportchecker.ReportChecker'
-//mainClassName = 'ru.victormalkov.reportchecker.ui.ReportCheckerUI'
+//noinspection GroovyUnusedAssignment
 mainClassName = 'ru.victormalkov.reportchecker.ui.Starter'
 
 repositories {
@@ -49,12 +48,3 @@ shadowJar {
         attributes 'Main-Class': 'ru.victormalkov.reportchecker.ui.Starter'
     }
 }
-/*
-jar {
-    manifest {
-        attributes 'Main-Class': 'ru.victormalkov.reportchecker.ui.ReportCheckerUI'
-    }
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}*/
