@@ -37,14 +37,8 @@ public class ResultFormController {
                 report2.debugPrintKeys();
                 StringBuilder text = new StringBuilder();
                 for (Day d : report.getDays()) {
-                    logger.info("Adding day " + d.getName());
-                    text.append(d.toPrettyString());
-                    text.append("Из второго отчёта:\n");
                     Day d2 = report2.getDay(d.getName());
-                    logger.info(d2 != null ? d2.getName() : "null");
-                    if (d2 != null) {
-                        text.append(d2.toPrettyString());
-                    }
+                    text.append(d.toPrettyString(d2));
                 }
                 Platform.runLater(() -> myTextArea.appendText(text.toString()));
                 return null;

@@ -1,5 +1,7 @@
 package ru.victormalkov.reportchecker.service;
 
+import java.util.Objects;
+
 public class Day {
     private String name;
     private int dayCache = 0;
@@ -78,32 +80,56 @@ public class Day {
                 '}';
     }
 
-    public String toPrettyString() {
-
-        return name +
+    public String toPrettyString(Day comparedDay) {
+        boolean otherIsNull = comparedDay == null;
+        if (otherIsNull) {
+            comparedDay = this;
+        }
+        return name + (otherIsNull ? " (ВТОРОГО ОТЧЁТА НЕТ)" : "") +
                 System.lineSeparator() +
                 "\t\t\tДЕНЬ\tНОЧЬ" +
                 System.lineSeparator() +
                 "Наличные\t" +
-                getDayCache() +
+                compared(getDayCache(), comparedDay.getDayCache()) +
                 "\t\t" +
-                getNightCache() +
+                compared(getNightCache(), comparedDay.getNightCache()) +
                 System.lineSeparator() +
                 "Перевод\t\t" +
-                getDayOnline() +
+                compared(getDayOnline(), comparedDay.getDayOnline()) +
                 "\t\t" +
-                getNightOnline() +
+                compared(getNightOnline(), comparedDay.getNightOnline()) +
                 System.lineSeparator() +
                 "Терминал\t" +
-                getDayTerminal() +
+                compared(getDayTerminal(), comparedDay.getDayTerminal()) +
                 "\t\t" +
-                getNightTerminal() +
+                compared(getNightTerminal(), comparedDay.getNightTerminal()) +
                 System.lineSeparator() +
                 "------------------------------------------" +
                 System.lineSeparator();
     }
 
+    private String compared(int amount1, int amount2) {
+        if (amount1 == amount2) {
+            return Integer.toString(amount1);
+        } else {
+            return "!!! " + amount1 + " (" + amount2 +  ")";
+        }
+    }
+
     private String normalizeDayName(String dayName) {
         return dayName != null ? dayName.toLowerCase().replace(",", ".") : null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Day day = (Day) o;
+        return getDayCache() == day.getDayCache() && getDayOnline() == day.getDayOnline() && getDayTerminal() == day.getDayTerminal() && getNightCache() == day.getNightCache() && getNightOnline() == day.getNightOnline() && getNightTerminal() == day.getNightTerminal() && Objects.equals(getName(), day.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getDayCache(), getDayOnline(), getDayTerminal(), getNightCache(), getNightOnline(), getNightTerminal());
     }
 }
