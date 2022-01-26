@@ -25,7 +25,7 @@ public class FileChooseFormController {
     private final ObservableList<DriveFile> observableList = FXCollections.observableArrayList();
 
     private void loadFileList() {
-        Task<Void> task = new Task<Void>() {
+        Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
                 int attempts = 0;
@@ -114,7 +114,7 @@ public class FileChooseFormController {
     }
 
     @FXML
-    public void copy1page(ActionEvent e) throws IOException {
+    public void copy1page(ActionEvent e) {
         if (fileListView.getSelectionModel().getSelectedItems().size() == 1) {
             String spreadsheetId = fileListView.getSelectionModel().getSelectedItems().get(0).getId();
             try {

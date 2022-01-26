@@ -9,13 +9,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.List;
 
 public class DailyReportReader {
     private static final Logger logger = LogManager.getLogger(AuthUtil.APP_NAME);
 
-    public DailyReport readReport(String spreadsheetId) throws GeneralSecurityException, IOException {
+    public DailyReport readReport(String spreadsheetId) throws IOException {
         DailyReport report = new DailyReport();
         Sheets sheetsService = AuthUtil.getSheetsService();
 

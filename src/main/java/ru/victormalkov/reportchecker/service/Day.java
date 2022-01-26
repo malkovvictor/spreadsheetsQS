@@ -79,29 +79,27 @@ public class Day {
     }
 
     public String toPrettyString() {
-        StringBuilder s = new StringBuilder();
-        s.append(name);
-        s.append(System.lineSeparator());
-        s.append("\t\t\tДЕНЬ\tНОЧЬ");
-        s.append(System.lineSeparator());
-        s.append("Наличные\t");
-        s.append(getDayCache());
-        s.append("\t\t");
-        s.append(getNightCache());
-        s.append(System.lineSeparator());
-        s.append("Перевод\t\t");
-        s.append(getDayOnline());
-        s.append("\t\t");
-        s.append(getNightOnline());
-        s.append(System.lineSeparator());
-        s.append("Терминал\t");
-        s.append(getDayTerminal());
-        s.append("\t\t");
-        s.append(getNightTerminal());
-        s.append(System.lineSeparator());
-        s.append("------------------------------------------");
-        s.append(System.lineSeparator());
 
-        return s.toString();
+        return name +
+                System.lineSeparator() +
+                "\t\t\tДЕНЬ\tНОЧЬ" +
+                System.lineSeparator() +
+                "Наличные\t" +
+                getDayCache() +
+                "\t\t" +
+                getNightCache() +
+                System.lineSeparator() +
+                "Перевод\t\t" +
+                getDayOnline() +
+                "\t\t" +
+                getNightOnline() +
+                System.lineSeparator() +
+                "Терминал\t" +
+                getDayTerminal() +
+                "\t\t" +
+                getNightTerminal() +
+                System.lineSeparator() +
+                "------------------------------------------" +
+                System.lineSeparator();
     }
 }

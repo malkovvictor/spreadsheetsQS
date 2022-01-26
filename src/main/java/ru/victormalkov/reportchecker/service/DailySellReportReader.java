@@ -6,11 +6,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,6 +66,7 @@ public class DailySellReportReader {
         for (int i = 2; i < rdata.size(); i++) {
             RowData row = rdata.get(i);
             List<CellData> rowdata = row.getValues();
+            //noinspection StatementWithEmptyBody
             if (rowdata == null || rowdata.size() < 2) {
                 // nothing
             } else if (borders.size() < 1) {
@@ -91,7 +90,7 @@ public class DailySellReportReader {
                 }
             }
         }
-        logger.info("borders found: " +  borders.toString());
+        logger.info("borders found: " +  borders);
         return borders;
     }
 

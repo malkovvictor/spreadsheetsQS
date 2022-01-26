@@ -10,7 +10,7 @@ import java.util.Map;
 public class DailyReport {
     private static final Logger logger = LogManager.getLogger(AuthUtil.APP_NAME);
 
-    private Map<String, Day> daysMap = new LinkedHashMap<>();
+    private final Map<String, Day> daysMap = new LinkedHashMap<>();
 
     public Day getDay(String dayName) {
         return daysMap.get(normalizeDayName(dayName));
