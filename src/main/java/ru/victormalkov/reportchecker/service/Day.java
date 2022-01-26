@@ -14,7 +14,7 @@ public class Day {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = normalizeDayName(name);
     }
 
     public int getDayOnline() {
@@ -101,5 +101,9 @@ public class Day {
                 System.lineSeparator() +
                 "------------------------------------------" +
                 System.lineSeparator();
+    }
+
+    private String normalizeDayName(String dayName) {
+        return dayName != null ? dayName.toLowerCase().replace(",", ".") : null;
     }
 }

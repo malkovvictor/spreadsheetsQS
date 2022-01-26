@@ -13,7 +13,7 @@ public class DailyReport {
     private final Map<String, Day> daysMap = new LinkedHashMap<>();
 
     public Day getDay(String dayName) {
-        return daysMap.get(normalizeDayName(dayName));
+        return daysMap.get(dayName);
     }
 
     public Collection<Day> getDays() {
@@ -22,13 +22,7 @@ public class DailyReport {
 
     public void pushDay(Day day) {
         logger.info("pushing day " + day.toString());
-        daysMap.put(normalizeDayName(day.getName()), day);
-    }
-
-    private String normalizeDayName(String dayName) {
-        String result = dayName != null ? dayName.toLowerCase().replace(",", ".") : null;
-        logger.info(String.format("Normalizing string %s, result is %s", dayName, result));
-        return result;
+        daysMap.put(day.getName(), day);
     }
 
     public void debugPrintKeys() {
