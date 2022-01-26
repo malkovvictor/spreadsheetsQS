@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'ru.victormalkov'
-version '2'
+version '2.1'
 
 application {
     mainClass = 'ru.victormalkov.reportchecker.ui.Starter'
