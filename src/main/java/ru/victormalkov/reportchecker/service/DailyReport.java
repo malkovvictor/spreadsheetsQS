@@ -1,26 +1,37 @@
 package ru.victormalkov.reportchecker.service;
 
-import java.util.ArrayList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class DailyReport {
-    private ArrayList<Day> days;
+    private static final Logger logger = LogManager.getLogger(AuthUtil.APP_NAME);
 
-    public Day getDay(int number) {
-        if (number <= days.size()) {
-            return days.get(number - 1);
-        } else {
-            return null;
-        }
+    private Map<String, Day> daysMap = new LinkedHashMap<>();
+
+    public Day getDay(String dayName) {
+        return daysMap.get(normalizeDayName(dayName));
     }
 
-    public ArrayList<Day> getDays() {
-        return days;
+    public Collection<Day> getDays() {
+        return daysMap.values();
     }
 
     public void pushDay(Day day) {
-        if (days == null) {
-            days = new ArrayList<>();
-        }
-        days.add(day);
+        logger.info("pushing day " + day.toString());
+        daysMap.put(normalizeDayName(day.getName()), day);
+    }
+
+    private String normalizeDayName(String dayName) {
+        String result = dayName != null ? dayName.toLowerCase().replace(",", ".") : null;
+        logger.info(String.format("Normalizing string %s, result is %s", dayName, result));
+        return result;
+    }
+
+    public void debugPrintKeys() {
+        logger.info(daysMap.keySet());
     }
 }

@@ -9,6 +9,14 @@ public class Day {
     private int nightOnline = 0;
     private int nightTerminal = 0;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getDayOnline() {
         return dayOnline;
     }
@@ -60,7 +68,8 @@ public class Day {
     @Override
     public String toString() {
         return "DailyReport{" +
-                "dayCache=" + dayCache +
+                "name=" + name +
+                ", dayCache=" + dayCache +
                 ", dayOnline=" + dayOnline +
                 ", dayTerminal=" + dayTerminal +
                 ", nightCache=" + nightCache +
@@ -94,9 +103,5 @@ public class Day {
         s.append(System.lineSeparator());
 
         return s.toString();
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

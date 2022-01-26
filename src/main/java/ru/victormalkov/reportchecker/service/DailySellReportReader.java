@@ -24,7 +24,7 @@ public class DailySellReportReader {
     private static final Pattern ponline = Pattern.compile(regexprOnline);
     private static final Pattern pterminal = Pattern.compile(regexprTerminal);
 
-    public DailyReport readReport(String spreadsheetId) throws GeneralSecurityException, IOException {
+    public DailyReport readReport(String spreadsheetId) throws IOException {
         DailyReport result = new DailyReport();
         Sheets sheetsService = AuthUtil.getSheetsService();
 

@@ -93,7 +93,22 @@ public class FileChooseFormController {
     @FXML
     private void click(ActionEvent e) throws IOException {
         if (fileListView.getSelectionModel().getSelectedItems().size() == 1) {
-            ReportCheckerUI.spreadsheetId = fileListView.getSelectionModel().getSelectedItems().get(0).getId();
+            String selectedName = fileListView.getSelectionModel().getSelectedItems().get(0).getName();
+            if (selectedName.startsWith("ТРОН")) {
+                ReportCheckerUI.sellReportSpreadsheetId = fileListView.getSelectionModel().getSelectedItems().get(0).getId();
+                String otherName = selectedName.replace("ТРОН", "ОТЧЁТ");
+                observableList.stream().filter(file -> file.getName().equals(otherName)).findAny()
+                        .ifPresent(file -> ReportCheckerUI.dailyReportSpreadsheetId = file.getId());
+            } else if (selectedName.startsWith("ОТЧЁТ")) {
+                ReportCheckerUI.dailyReportSpreadsheetId = fileListView.getSelectionModel().getSelectedItems().get(0).getId();
+                String otherName = selectedName.replace("ОТЧЁТ", "ТРОН");
+                observableList.stream().filter(file -> file.getName().equals(otherName)).findAny()
+                        .ifPresent(file -> ReportCheckerUI.sellReportSpreadsheetId = file.getId());
+            } else {
+                ReportCheckerUI.sellReportSpreadsheetId = fileListView.getSelectionModel().getSelectedItems().get(0).getId();
+                ReportCheckerUI.dailyReportSpreadsheetId = null;
+            }
+
             ReportCheckerUI.instance.changeScene("/forms/ResultForm.fxml");
         }
     }
