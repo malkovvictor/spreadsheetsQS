@@ -112,7 +112,7 @@ public class Day {
         if (amount1 == amount2) {
             return Integer.toString(amount1);
         } else {
-            return "!!! " + amount1 + " (" + amount2 +  ")";
+            return "!!! " + amount1 + " - " + amount2 +  " = " + (amount1 - amount2);
         }
     }
 
