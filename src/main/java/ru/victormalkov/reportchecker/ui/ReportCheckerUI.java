@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
@@ -29,6 +30,7 @@ public class ReportCheckerUI extends Application {
         String stylesheet = getClass().getResource("/pibug.css").toExternalForm();
         scene.getStylesheets().add(stylesheet);
 
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/tron.png")));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
