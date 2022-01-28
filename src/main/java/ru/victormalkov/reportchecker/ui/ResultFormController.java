@@ -3,6 +3,7 @@ package ru.victormalkov.reportchecker.ui;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import org.apache.logging.log4j.LogManager;
@@ -21,9 +22,6 @@ public class ResultFormController {
     public void initialize() {
         final String sellReportSpreadsheetId = ReportCheckerUI.sellReportSpreadsheetId;
         final String dailyReportSpreadsheetId = ReportCheckerUI.dailyReportSpreadsheetId;
-        //final String spreadsheetId = "1OPVrXiPLh3LtM8rIveEPhUJQjgEtyM08T7i5bvYE3Gw";
-        //final String spreadsheetId = "1-VoVp6VvzeAQZgmMv4Bx0yGq9Q0GrBk-sK6AUtgE7NM";
-        //final String spreadsheetId = "1qjqjJt3Adb9SaoiNtPxjvichhUJd4G2tPnzpurGNgGg";
 
         Task<Void> task = new Task<>() {
             @Override
@@ -48,6 +46,17 @@ public class ResultFormController {
             protected void succeeded() {
                 super.succeeded();
                 Platform.runLater(() -> progressIndicator.setVisible(false));
+            }
+
+            @Override
+            protected void failed() {
+                super.failed();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Проверка отчётов");
+                alert.setHeaderText(null);
+                alert.setContentText("Что-то пошло не так.");
+                alert.showAndWait();
+                Platform.exit();
             }
         };
         new Thread(task).start();
