@@ -12,8 +12,8 @@ import java.io.IOException;
 
 public class ReportCheckerUI extends Application {
     public static ReportCheckerUI instance;
-    public static String sellReportSpreadsheetId; //dirty hack
-    public static String dailyReportSpreadsheetId; //dirty hack
+    public static String sellReportSpreadsheetId;
+    public static String dailyReportSpreadsheetId;
 
     private Stage primaryStage;
 

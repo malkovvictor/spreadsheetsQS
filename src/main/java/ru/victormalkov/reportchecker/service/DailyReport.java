@@ -21,11 +21,11 @@ public class DailyReport {
     }
 
     public void pushDay(Day day) {
-        logger.info("pushing day " + day.toString());
+        logger.debug("pushing day " + day.toString());
         daysMap.put(day.getName(), day);
     }
 
     public void debugPrintKeys() {
-        logger.info(daysMap.keySet());
+        logger.debug(daysMap.keySet());
     }
 }

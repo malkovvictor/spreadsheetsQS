@@ -47,7 +47,7 @@ public class DailyReportReader {
     }
 
     private int readValue(List<RowData> rdata, int c, int r) {
-        logger.info(String.format("Column: %d, Row: %d, value: %s", c, r, rdata.get(r).getValues().get(c).getFormattedValue()));
+        logger.debug(String.format("Column: %d, Row: %d, value: %s", c, r, rdata.get(r).getValues().get(c).getFormattedValue()));
         try {
             return Integer.parseInt(rdata.get(r).getValues().get(c).getFormattedValue());
         } catch (NumberFormatException e) {
