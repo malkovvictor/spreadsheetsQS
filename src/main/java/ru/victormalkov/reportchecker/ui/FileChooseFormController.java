@@ -11,7 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import ru.victormalkov.reportchecker.service.AuthUtil;
 import ru.victormalkov.reportchecker.service.DriveFile;
@@ -20,19 +20,11 @@ import ru.victormalkov.reportchecker.service.Updater;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class FileChooseFormController {
     @FXML
     ListView<DriveFile> fileListView;
-
-    @FXML
-    Label versionLabel;
-
-    @FXML
-    Label newVersionLabel;
-
-    @FXML
-    Button updateBtn;
 
     private final ObservableList<DriveFile> observableList = FXCollections.observableArrayList();
     private final Updater updater = new Updater();
@@ -101,11 +93,28 @@ public class FileChooseFormController {
     @FXML
     public void initialize() {
         fileListView.setItems(observableList);
-        versionLabel.setText(Updater.getVersionString());
         if (updater.hasUpdate()) {
-            newVersionLabel.setText("Новая: " + updater.getRemoteVersion());
-            newVersionLabel.setVisible(true);
-            updateBtn.setVisible(true);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                    "Текущая версия: " + Updater.getVersionString() + ", есть новая " + updater.getRemoteVersion() + ", обновить?",
+                    ButtonType.YES,
+                    ButtonType.NO
+                    );
+            alert.setTitle("Отчёты трона");
+            alert.setHeaderText("Обновление");
+            ((Button) alert.getDialogPane().lookupButton(ButtonType.YES)).setText("Да");
+            ((Button) alert.getDialogPane().lookupButton(ButtonType.NO)).setText("Нет");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.YES) {
+                new Thread(updater::doUpdate).start();
+                Alert updatingAlert = new Alert(Alert.AlertType.INFORMATION,
+                        "Скачиваю новую версию",
+                        ButtonType.OK);
+                updatingAlert.setTitle("Отчёты трона");
+                updatingAlert.setHeaderText("Обновление");
+                ((Button) updatingAlert.getDialogPane().lookupButton(ButtonType.OK)).setText("Жду");
+                updatingAlert.showAndWait();
+                return;
+            }
         }
         loadFileList();
     }
@@ -153,10 +162,5 @@ public class FileChooseFormController {
                 alert.showAndWait();
             }
         }
-    }
-
-    @FXML
-    public void selfUpdate(ActionEvent e) {
-        new Thread(updater::doUpdate).start();
     }
 }
