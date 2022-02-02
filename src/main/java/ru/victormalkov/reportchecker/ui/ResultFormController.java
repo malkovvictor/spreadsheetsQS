@@ -10,6 +10,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.victormalkov.reportchecker.service.*;
 
+import java.io.IOException;
+
 public class ResultFormController {
     private static final Logger logger = LogManager.getLogger(AuthUtil.APP_NAME);
 
@@ -25,20 +27,24 @@ public class ResultFormController {
 
         Task<Void> task = new Task<>() {
             @Override
-            protected Void call() throws Exception {
-                DailySellReportReader sellReportReader = new DailySellReportReader();
-                DailyReportReader dailyReportReader = new DailyReportReader();
+            protected Void call() {
+                try {
+                    DailySellReportReader sellReportReader = new DailySellReportReader();
+                    DailyReportReader dailyReportReader = new DailyReportReader();
 
-                DailyReport report = sellReportReader.readReport(sellReportSpreadsheetId);
-                DailyReport report2 = dailyReportReader.readReport(dailyReportSpreadsheetId);
-                report.debugPrintKeys();
-                report2.debugPrintKeys();
-                StringBuilder text = new StringBuilder();
-                for (Day d : report.getDays()) {
-                    Day d2 = report2.getDay(d.getName());
-                    text.append(d.toPrettyString(d2));
+                    DailyReport report = sellReportReader.readReport(sellReportSpreadsheetId);
+                    DailyReport report2 = dailyReportReader.readReport(dailyReportSpreadsheetId);
+                    report.debugPrintKeys();
+                    report2.debugPrintKeys();
+                    StringBuilder text = new StringBuilder();
+                    for (Day d : report.getDays()) {
+                        Day d2 = report2.getDay(d.getName());
+                        text.append(d.toPrettyString(d2));
+                    }
+                    Platform.runLater(() -> myTextArea.appendText(text.toString()));
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                Platform.runLater(() -> myTextArea.appendText(text.toString()));
                 return null;
             }
 
