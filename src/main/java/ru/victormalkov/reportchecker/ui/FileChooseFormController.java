@@ -104,7 +104,7 @@ public class FileChooseFormController {
             ((Button) alert.getDialogPane().lookupButton(ButtonType.YES)).setText("Да");
             ((Button) alert.getDialogPane().lookupButton(ButtonType.NO)).setText("Нет");
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.YES) {
+            if (result.isPresent() && result.get() == ButtonType.YES) {
                 new Thread(updater::doUpdate).start();
                 Alert updatingAlert = new Alert(Alert.AlertType.INFORMATION,
                         "Скачиваю новую версию",
