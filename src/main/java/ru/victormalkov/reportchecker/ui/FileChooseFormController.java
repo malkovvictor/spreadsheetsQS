@@ -10,10 +10,12 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import ru.victormalkov.reportchecker.service.AuthUtil;
 import ru.victormalkov.reportchecker.service.DriveFile;
 import ru.victormalkov.reportchecker.service.PageCopyUtil;
+import ru.victormalkov.reportchecker.service.Updater;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,6 +23,9 @@ import java.util.List;
 public class FileChooseFormController {
     @FXML
     ListView<DriveFile> fileListView;
+
+    @FXML
+    Label versionLabel;
 
     private final ObservableList<DriveFile> observableList = FXCollections.observableArrayList();
 
@@ -85,8 +90,12 @@ public class FileChooseFormController {
         new Thread(task).start();
     }
 
+    @FXML
     public void initialize() {
-        Platform.runLater(() -> fileListView.setItems(observableList));
+        Platform.runLater(() -> {
+            fileListView.setItems(observableList);
+            versionLabel.setText(Updater.getVersionString());
+        });
         loadFileList();
     }
 

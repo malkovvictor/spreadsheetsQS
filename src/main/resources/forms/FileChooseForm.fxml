@@ -3,10 +3,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ru.victormalkov.reportchecker.ui.FileChooseFormController">
-   <Label layoutX="36.0" layoutY="16.0" text="Файл с отчётом"/>
-   <ListView fx:id="fileListView" layoutX="36.0" layoutY="49.0" prefHeight="302.0" prefWidth="539.0"/>
-   <Button layoutX="36.0" layoutY="360.0" mnemonicParsing="false" onAction="#click" text="Посчитать"/>
-   <Button layoutX="429.0" layoutY="360.0" mnemonicParsing="false" onAction="#copy1page" text="Создать страницы"/>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.victormalkov.reportchecker.ui.FileChooseFormController">
+   <Label layoutX="36.0" layoutY="16.0" text="Файл с отчётом" />
+   <ListView fx:id="fileListView" layoutX="36.0" layoutY="49.0" prefHeight="302.0" prefWidth="539.0" />
+   <Button layoutX="36.0" layoutY="360.0" mnemonicParsing="false" onAction="#click" text="Посчитать" />
+   <Button layoutX="429.0" layoutY="360.0" mnemonicParsing="false" onAction="#copy1page" text="Создать страницы" />
+   <Label fx:id="versionLabel" layoutX="252.0" layoutY="364.0" text="Label" />
 </AnchorPane>
