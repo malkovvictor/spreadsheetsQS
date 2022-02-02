@@ -135,7 +135,7 @@ public class FileChooseFormController {
                 }
             } else if (selectedName.startsWith("ОТЧЁТ")) {
                 ReportCheckerUI.dailyReportSpreadsheetId = fileListView.getSelectionModel().getSelectedItems().get(0).getId();
-                String otherName = selectedName.replace("ОТЧЁТ", "ТРОН");
+                final String otherName = selectedName.replace("ОТЧЁТ", "ТРОН").replace("ОТЧЕТ", "ТРОН");
                 observableList.stream().filter(file -> file.getName().equals(otherName)).findAny()
                         .ifPresent(file -> ReportCheckerUI.sellReportSpreadsheetId = file.getId());
             } else {
