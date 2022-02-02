@@ -10,6 +10,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import ru.victormalkov.reportchecker.service.AuthUtil;
@@ -27,7 +28,14 @@ public class FileChooseFormController {
     @FXML
     Label versionLabel;
 
+    @FXML
+    Label newVersionLabel;
+
+    @FXML
+    Button updateBtn;
+
     private final ObservableList<DriveFile> observableList = FXCollections.observableArrayList();
+    private final Updater updater = new Updater();
 
     private void loadFileList() {
         Task<Void> task = new Task<>() {
@@ -92,10 +100,13 @@ public class FileChooseFormController {
 
     @FXML
     public void initialize() {
-        Platform.runLater(() -> {
-            fileListView.setItems(observableList);
-            versionLabel.setText(Updater.getVersionString());
-        });
+        fileListView.setItems(observableList);
+        versionLabel.setText(Updater.getVersionString());
+        if (updater.hasUpdate()) {
+            newVersionLabel.setText("Новая: " + updater.getRemoteVersion());
+            newVersionLabel.setVisible(true);
+            updateBtn.setVisible(true);
+        }
         loadFileList();
     }
 
@@ -142,5 +153,10 @@ public class FileChooseFormController {
                 alert.showAndWait();
             }
         }
+    }
+
+    @FXML
+    public void selfUpdate(ActionEvent e) {
+        new Thread(updater::doUpdate).start();
     }
 }

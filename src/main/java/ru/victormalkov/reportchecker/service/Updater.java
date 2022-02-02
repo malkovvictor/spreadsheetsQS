@@ -26,6 +26,12 @@ public class Updater {
     private String downloadURL;
     private String newJarName;
 
+    public String getRemoteVersion() {
+        return remoteVersion;
+    }
+
+    private String remoteVersion;
+
     public boolean hasUpdate() {
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(UPDATE_URL);
@@ -46,8 +52,8 @@ public class Updater {
         try {
             JsonElement element = JsonParser.parseString(jsonStr);
             JsonObject jsonObject = element.getAsJsonObject();
-            String tagName = jsonObject.get("tag_name").getAsString();
-            ModuleDescriptor.Version remoteVersion = ModuleDescriptor.Version.parse(tagName);
+            remoteVersion = jsonObject.get("tag_name").getAsString();
+            ModuleDescriptor.Version remoteVersionComparable = ModuleDescriptor.Version.parse(remoteVersion);
             element = jsonObject.get("assets");
             jsonObject = element.getAsJsonArray().get(0).getAsJsonObject();
             element = jsonObject.get("browser_download_url");
@@ -58,7 +64,7 @@ public class Updater {
                 return false;
             ModuleDescriptor.Version myVersion = ModuleDescriptor.Version.parse(myVersionStr);
 
-            return myVersion.compareTo(remoteVersion) < 0;
+            return myVersion.compareTo(remoteVersionComparable) < 0;
         } catch (Exception e) {
             // Update is optional, so every exception means we do not need to update now
             e.printStackTrace();
@@ -85,6 +91,7 @@ public class Updater {
 
             startNewJarAndCloseCurrent();
         } catch (Exception e) {
+            // Update is optional, so every exception means we do not need to update now
             e.printStackTrace();
         }
     }

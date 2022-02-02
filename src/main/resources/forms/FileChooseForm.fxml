@@ -8,5 +8,7 @@
    <ListView fx:id="fileListView" layoutX="36.0" layoutY="49.0" prefHeight="302.0" prefWidth="539.0" />
    <Button layoutX="36.0" layoutY="360.0" mnemonicParsing="false" onAction="#click" text="Посчитать" />
    <Button layoutX="429.0" layoutY="360.0" mnemonicParsing="false" onAction="#copy1page" text="Создать страницы" />
-   <Label fx:id="versionLabel" layoutX="252.0" layoutY="364.0" text="Label" />
+   <Label fx:id="versionLabel" layoutX="253.0" layoutY="352.0" text="Label" />
+   <Label fx:id="newVersionLabel" layoutX="253.0" layoutY="377.0" text="Label" visible="false" />
+   <Button fx:id="updateBtn" layoutX="312.0" layoutY="360.0" onAction="#selfUpdate" mnemonicParsing="false" text="Обновить" visible="false" />
 </AnchorPane>
