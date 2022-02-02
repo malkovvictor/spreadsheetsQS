@@ -125,9 +125,14 @@ public class FileChooseFormController {
             String selectedName = fileListView.getSelectionModel().getSelectedItems().get(0).getName();
             if (selectedName.startsWith("ТРОН")) {
                 ReportCheckerUI.sellReportSpreadsheetId = fileListView.getSelectionModel().getSelectedItems().get(0).getId();
-                String otherName = selectedName.replace("ТРОН", "ОТЧЁТ");
+                final String otherName = selectedName.replace("ТРОН", "ОТЧЁТ");
                 observableList.stream().filter(file -> file.getName().equals(otherName)).findAny()
                         .ifPresent(file -> ReportCheckerUI.dailyReportSpreadsheetId = file.getId());
+                if (ReportCheckerUI.dailyReportSpreadsheetId == null) {
+                    final String otherName2 = selectedName.replace("ТРОН", "ОТЧЕТ");
+                    observableList.stream().filter(file -> file.getName().equals(otherName2)).findAny()
+                            .ifPresent(file -> ReportCheckerUI.dailyReportSpreadsheetId = file.getId());
+                }
             } else if (selectedName.startsWith("ОТЧЁТ")) {
                 ReportCheckerUI.dailyReportSpreadsheetId = fileListView.getSelectionModel().getSelectedItems().get(0).getId();
                 String otherName = selectedName.replace("ОТЧЁТ", "ТРОН");

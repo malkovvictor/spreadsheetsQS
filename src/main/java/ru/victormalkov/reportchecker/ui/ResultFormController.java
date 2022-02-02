@@ -33,12 +33,15 @@ public class ResultFormController {
                     DailyReportReader dailyReportReader = new DailyReportReader();
 
                     DailyReport report = sellReportReader.readReport(sellReportSpreadsheetId);
-                    DailyReport report2 = dailyReportReader.readReport(dailyReportSpreadsheetId);
+                    DailyReport report2 = null;
+                    if (dailyReportSpreadsheetId != null)
+                        report2 = dailyReportReader.readReport(dailyReportSpreadsheetId);
                     report.debugPrintKeys();
-                    report2.debugPrintKeys();
+                    if (report2 != null)
+                        report2.debugPrintKeys();
                     StringBuilder text = new StringBuilder();
                     for (Day d : report.getDays()) {
-                        Day d2 = report2.getDay(d.getName());
+                        Day d2 = report2 != null ? report2.getDay(d.getName()) : null;
                         text.append(d.toPrettyString(d2));
                     }
                     Platform.runLater(() -> myTextArea.appendText(text.toString()));
