@@ -133,7 +133,7 @@ public class FileChooseFormController {
                     observableList.stream().filter(file -> file.getName().equals(otherName2)).findAny()
                             .ifPresent(file -> ReportCheckerUI.dailyReportSpreadsheetId = file.getId());
                 }
-            } else if (selectedName.startsWith("ОТЧЁТ")) {
+            } else if (selectedName.startsWith("ОТЧЁТ") || selectedName.startsWith("ОТЧЕТ")) {
                 ReportCheckerUI.dailyReportSpreadsheetId = fileListView.getSelectionModel().getSelectedItems().get(0).getId();
                 final String otherName = selectedName.replace("ОТЧЁТ", "ТРОН").replace("ОТЧЕТ", "ТРОН");
                 observableList.stream().filter(file -> file.getName().equals(otherName)).findAny()
