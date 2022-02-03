@@ -29,6 +29,8 @@ public class ReportCheckerUI extends Application {
 
         String stylesheet = getClass().getResource("/pibug.css").toExternalForm();
         scene.getStylesheets().add(stylesheet);
+        stylesheet = getClass().getResource("/reports.css").toExternalForm();
+        scene.getStylesheets().add(stylesheet);
 
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/tron.png")));
         primaryStage.setScene(scene);

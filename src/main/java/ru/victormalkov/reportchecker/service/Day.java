@@ -81,28 +81,29 @@ public class Day {
     }
 
     public String toPrettyString(Day comparedDay) {
-        boolean otherIsNull = comparedDay == null;
+        final boolean otherIsNull = comparedDay == null;
+        final String format = "%8s  %6s  %6s";
         if (otherIsNull) {
             comparedDay = this;
         }
         return name + (otherIsNull ? " (ВТОРОГО ОТЧЁТА НЕТ)" : "") +
                 System.lineSeparator() +
-                "\t\t\tДЕНЬ\tНОЧЬ" +
+                String.format(format, "", "ДЕНЬ", "НОЧЬ") +
                 System.lineSeparator() +
-                "Наличные\t" +
-                compared(getDayCache(), comparedDay.getDayCache()) +
-                "\t\t" +
-                compared(getNightCache(), comparedDay.getNightCache()) +
+                String.format(format,
+                        "Наличные",
+                        compared(getDayCache(), comparedDay.getDayCache()),
+                        compared(getNightCache(), comparedDay.getNightCache())) +
                 System.lineSeparator() +
-                "Перевод\t\t" +
-                compared(getDayOnline(), comparedDay.getDayOnline()) +
-                "\t\t" +
-                compared(getNightOnline(), comparedDay.getNightOnline()) +
+                String.format(format,
+                        "Перевод ",
+                        compared(getDayOnline(), comparedDay.getDayOnline()),
+                        compared(getNightOnline(), comparedDay.getNightOnline())) +
                 System.lineSeparator() +
-                "Терминал\t" +
-                compared(getDayTerminal(), comparedDay.getDayTerminal()) +
-                "\t\t" +
-                compared(getNightTerminal(), comparedDay.getNightTerminal()) +
+                String.format(format,
+                        "Терминал",
+                        compared(getDayTerminal(), comparedDay.getDayTerminal()),
+                        compared(getNightTerminal(), comparedDay.getNightTerminal())) +
                 System.lineSeparator() +
                 "------------------------------------------" +
                 System.lineSeparator();
@@ -112,7 +113,7 @@ public class Day {
         if (amount1 == amount2) {
             return Integer.toString(amount1);
         } else {
-            return "!!! " + amount1 + " - " + amount2 +  " = " + (amount1 - amount2);
+            return "! " + amount1 + "-" + amount2 + " = " + (amount1 - amount2);
         }
     }
 
