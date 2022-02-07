@@ -1,5 +1,6 @@
 package ru.victormalkov.reportchecker.service;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Day {
@@ -82,29 +83,18 @@ public class Day {
 
     public String toPrettyString(Day comparedDay) {
         final boolean otherIsNull = comparedDay == null;
-        final String format = "%8s  %6s  %6s";
         if (otherIsNull) {
             comparedDay = this;
         }
         return name + (otherIsNull ? " (ВТОРОГО ОТЧЁТА НЕТ)" : "") +
                 System.lineSeparator() +
-                String.format(format, "", "ДЕНЬ", "НОЧЬ") +
-                System.lineSeparator() +
-                String.format(format,
-                        "Наличные",
-                        compared(getDayCache(), comparedDay.getDayCache()),
-                        compared(getNightCache(), comparedDay.getNightCache())) +
-                System.lineSeparator() +
-                String.format(format,
-                        "Перевод ",
-                        compared(getDayOnline(), comparedDay.getDayOnline()),
-                        compared(getNightOnline(), comparedDay.getNightOnline())) +
-                System.lineSeparator() +
-                String.format(format,
-                        "Терминал",
-                        compared(getDayTerminal(), comparedDay.getDayTerminal()),
-                        compared(getNightTerminal(), comparedDay.getNightTerminal())) +
-                System.lineSeparator() +
+                TableUtil.tableToString(List.of(
+                                List.of("", "День", "Ночь"),
+                                List.of("Наличные", compared(getDayCache(), comparedDay.getDayCache()), compared(getNightCache(), comparedDay.getNightCache())),
+                                List.of("Перевод", compared(getDayOnline(), comparedDay.getDayOnline()), compared(getNightOnline(), comparedDay.getNightOnline())),
+                                List.of("Терминал", compared(getDayTerminal(), comparedDay.getDayTerminal()), compared(getNightTerminal(), comparedDay.getNightTerminal()))
+                        )
+                ) +
                 "------------------------------------------" +
                 System.lineSeparator();
     }
